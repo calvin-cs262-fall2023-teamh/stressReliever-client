@@ -1,0 +1,25 @@
+Exercise 1.1
+	- Help me decide app, user can write pros and cons for each decisions, visualize the difference, throw a dice, flip a coin, have data influence the outcome, throw again and remove
+	  the current options... help people with neuroticism to pick and feel comfort.
+
+	- record my turd app, record the time I go take a poop, record the color and stuff to see if I am healthy or not. Oh, how about piss too? haha toilet jokes are so boring but
+	  I do think this would help in some way.
+
+Exercise 1.2 
+1. 	a. Junior
+	b. BCS
+	c. CS112: B
+	   CS212: A
+
+2.	a. none
+	b. github
+
+3. 	a. Openness:83
+	   Conscientiousness: 62.5
+	   Extraversion: 21
+	   Agreeableness: 52
+	   Neuroticism: 71
+
+	b. none
+
+4. 	a. none
