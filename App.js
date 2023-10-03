@@ -1,24 +1,10 @@
-// App.js
+import * as React from 'react';
+import MainContainer from './navigation/MainContainer';
 
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { View, StyleSheet } from 'react-native';
-import FidgetToy from './src/components/FidgetToy';
-
-export default function App() {
+function App() {
   return (
-    <View style={styles.container}>
-      <FidgetToy />
-      <StatusBar style="auto" />
-    </View>
+    <MainContainer/>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
+export default App;

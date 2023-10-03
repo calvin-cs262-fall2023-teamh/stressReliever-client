@@ -1,9 +1,7 @@
-// src/components/FidgetToy.js
-
 import React, { useState, useEffect } from 'react';
 import { Animated, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const FidgetToy = () => {
+const ColorChange = () => {
   const [animatedValue] = useState(new Animated.Value(0));
   const [colorIndex, setColorIndex] = useState(0);
   
@@ -62,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FidgetToy;
+export default ColorChange;
