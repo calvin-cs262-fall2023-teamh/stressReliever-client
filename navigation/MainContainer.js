@@ -5,17 +5,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
 import HomeScreen from './screens/HomeScreen';
-import DrawingScreen from './screens/drawing'
+import DrawingScreen from './screens/drawing';
 import SpinnerScreen from './screens/SpinnerScreen';
 import ColorChangeScreen from './screens/ColorChangeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
-//Screen names
+// Screen names
 const homeName = "Home";
-const drawingName = "Draw"
+const drawingName = "Draw";
 const spinnerName = "Spinner";
 const colorChangeName = "ColorChange";
-const profileName = "Profile"
+const profileName = "Profile";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,41 +24,37 @@ function MainContainer() {
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName={homeName}
-        screenOption={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color }) => {
             let iconName;
             let rn = route.name;
+            let iconSize = focused ? 30 : 25;
+            let iconStyle = { marginBottom: -11 };  
 
             if (rn === homeName) {
-              iconName = focused ? 'home' : 'home-outline';
-
-            } else if (rn === drawingName){
-              iconName = focused ? 'brush' : 'brush-outline';
+              iconName = 'home-outline';
+            } else if (rn === drawingName) {
+              iconName = 'brush-outline';
             } else if (rn === spinnerName) {
-              iconName = focused ? 'time' : 'time-outline';
-
+              iconName = 'reload-outline';  
             } else if (rn === colorChangeName) {
-              iconName = focused ? 'finger-print' : 'finger-print-outline';
-            } else if(rn === profileName) {
-              iconName = focused ? 'person' : 'person-outline';
+              iconName = 'color-palette-outline'; 
+            } else if (rn === profileName) {
+              iconName = 'person-outline';
             }
 
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Ionicons name={iconName} size={iconSize} color={color} style={iconStyle} />;
           },
-        })}
-        screenOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'grey',
-          labelStyle: { paddingBottom: 10, fontSize: 10 },
-          style: { padding: 10, height: 70}
-        }}>
-
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'grey',
+          tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: -5 },
+        })}>
+        
         <Tab.Screen name={homeName} component={HomeScreen} />
-        <Tab.Screen name={drawingName} component={DrawingScreen}/>
+        <Tab.Screen name={drawingName} component={DrawingScreen} />
         <Tab.Screen name={spinnerName} component={SpinnerScreen} />
         <Tab.Screen name={colorChangeName} component={ColorChangeScreen} />
-        <Tab.Screen name={profileName} component={ProfileScreen}/>
+        <Tab.Screen name={profileName} component={ProfileScreen} />
 
       </Tab.Navigator>
     </NavigationContainer>
