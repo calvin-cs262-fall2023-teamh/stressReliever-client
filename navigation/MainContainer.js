@@ -36,9 +36,9 @@ function MainContainer() {
             } else if (rn === drawingName) {
               iconName = 'brush-outline';
             } else if (rn === spinnerName) {
-              iconName = 'reload-outline';  // Consistent icon for both states
+              iconName = 'reload-outline';  
             } else if (rn === colorChangeName) {
-              iconName = 'color-palette-outline';  // Consistent icon for both states
+              iconName = 'color-palette-outline'; 
             } else if (rn === profileName) {
               iconName = 'person-outline';
             }
