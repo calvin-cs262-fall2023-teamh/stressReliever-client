@@ -2,21 +2,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, PanResponder, TouchableOpacity, Text } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
+// Array of colors for drawing and background
 const rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 const colorChangeInterval = 3000;
 
 const DrawingScreen = () => {
+  // State for managing paths, colors, and drawing status
   const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
   const [colorIndex, setColorIndex] = useState(0);
   const drawingColor = rainbowColors[colorIndex];
   const backgroundColor = rainbowColors[(colorIndex + 4) % rainbowColors.length];
+  
   const colorIndexRef = useRef(colorIndex);
 
-  const handlePanResponderMove = (event, gestureState) => {
-    const { moveX, moveY } = gestureState;
-    const point = `${moveX},${moveY}`;
+  // Handle drawing move events
+  const handlePanResponderMove = (event) => {
+    const { locationX, locationY } = event.nativeEvent;
+    const point = `${locationX},${locationY -15}`;  
 
     if (drawing) {
       setDrawingPath((prevPath) => `${prevPath} L${point}`);
@@ -26,18 +30,21 @@ const DrawingScreen = () => {
     }
   };
 
+  // Finalize path when drawing ends
   const handlePanResponderRelease = () => {
     setDrawing(false);
     setPath((prevPath) => prevPath + drawingPath);
     setDrawingPath('');
   };
 
+  // Clear the drawing canvas
   const clearCanvas = () => {
     setPath('');
     setDrawingPath('');
     setDrawing(false);
   };
 
+  // Automatically change drawing color
   useEffect(() => {
     const colorInterval = setInterval(() => {
       colorIndexRef.current = (colorIndexRef.current + 1) % rainbowColors.length;
@@ -49,6 +56,7 @@ const DrawingScreen = () => {
     };
   }, []);
 
+  // Initialize the pan responder for touch events
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: handlePanResponderMove,

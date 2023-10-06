@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Animated, TouchableOpacity, StyleSheet, View } from 'react-native';
 
 const FidgetSpinner = () => {
+  // Declare animated value for rotation
   const [animatedValue] = useState(new Animated.Value(0));
 
+  // Start the rotation animation when the component is mounted
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: 1,
       duration: 2000,
       useNativeDriver: false,
-      repeat: -1, // Make the animation repeat indefinitely
+      repeat: -1, // Infinite rotation
     }).start();
   }, []);
 
+  // Define the rotation style using interpolation
   const spinnerStyle = {
     transform: [
       {
@@ -26,11 +29,13 @@ const FidgetSpinner = () => {
 
   return (
     <View style={styles.container}>
+      {/* Render the animated spinner */}
       <Animated.View style={[styles.spinner, spinnerStyle]} />
     </View>
   );
 };
 
+// Styles for the component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -53,4 +58,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Export the FidgetSpinner component
 export default FidgetSpinner;
