@@ -1,86 +1,98 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
-import { Svg, Path } from 'react-native-svg';
-import randomColor from "randomcolor";
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, PanResponder, TouchableOpacity, Text } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 
-// Get device dimensions
-const { height, width } = Dimensions.get('window');
+// Array of colors for drawing and background
+const rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
+const colorChangeInterval = 3000;
 
-export default () => {
-  // State for drawn paths, current path, clear button state, and stroke color
-  const [paths, setPaths] = useState([]);
-  const [currentPath, setCurrentPath] = useState([]);
-  const [isClearButtonClicked, setClearButtonClicked] = useState(false);
-  const [strokeColor, setStrokeColor] = useState('black');
+const DrawingScreen = () => {
+  // State for managing paths, colors, and drawing status
+  const [path, setPath] = useState('');
+  const [drawingPath, setDrawingPath] = useState('');
+  const [drawing, setDrawing] = useState(false);
+  const [colorIndex, setColorIndex] = useState(0);
+  const drawingColor = rainbowColors[colorIndex];
+  const backgroundColor = rainbowColors[(colorIndex + 4) % rainbowColors.length];
+  
+  const colorIndexRef = useRef(colorIndex);
 
-  // Finalize the current path when touch ends
-  const onTouchEnd = () => {
-    paths.push(currentPath);
-    setCurrentPath([]);
-    setClearButtonClicked(false);
+  // Handle drawing move events
+  const handlePanResponderMove = (event) => {
+    const { locationX, locationY } = event.nativeEvent;
+    const point = `${locationX},${locationY -15}`;  
+
+    if (drawing) {
+      setDrawingPath((prevPath) => `${prevPath} L${point}`);
+    } else {
+      setDrawingPath((prevPath) => (prevPath === '' ? `M${point}` : `${prevPath} L${point}`));
+      setDrawing(true);
+    }
   };
 
-  // Record path as user draws
-  const onTouchMove = (event) => {
-    const newPath = [...currentPath];
-    const locationX = event.nativeEvent.locationX;
-    const locationY = event.nativeEvent.locationY;
-    newPath.push(`${newPath.length === 0 ? 'M' : ''}${locationX.toFixed(0)},${locationY.toFixed(0)} `);
-    setCurrentPath(newPath);
+  // Finalize path when drawing ends
+  const handlePanResponderRelease = () => {
+    setDrawing(false);
+    setPath((prevPath) => prevPath + drawingPath);
+    setDrawingPath('');
   };
 
-  // Clear the drawing and change stroke color
-  const handleClearButtonClick = () => {
-    setPaths([]);
-    setCurrentPath([]);
-    setClearButtonClicked(true);
-    setStrokeColor(randomColor());
+  // Clear the drawing canvas
+  const clearCanvas = () => {
+    setPath('');
+    setDrawingPath('');
+    setDrawing(false);
   };
+
+  // Automatically change drawing color
+  useEffect(() => {
+    const colorInterval = setInterval(() => {
+      colorIndexRef.current = (colorIndexRef.current + 1) % rainbowColors.length;
+      setColorIndex(colorIndexRef.current);
+    }, colorChangeInterval);
+
+    return () => {
+      clearInterval(colorInterval);
+    };
+  }, []);
+
+  // Initialize the pan responder for touch events
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: handlePanResponderMove,
+    onPanResponderRelease: handlePanResponderRelease,
+  });
 
   return (
-    <View style={styles.container}>
-      {/* Drawing canvas */}
-      <View style={styles.svgContainer} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-        <Svg height={height * 0.7} width={width}>
-          <Path
-            d={paths.join('')}
-            stroke={isClearButtonClicked ? 'transparent' : strokeColor}
-            fill={'transparent'}
-            strokeWidth={3}
-          />
-          {/* Render all the paths */}
-          {paths.map((item, index) => (
-            <Path
-              key={`path-${index}`}
-              d={currentPath.join('')}
-              stroke={isClearButtonClicked ? 'transparent' : strokeColor}
-              fill={'transparent'}
-              strokeWidth={2}
-            />
-          ))}
-        </Svg>
+    <View style={[styles.container, { backgroundColor }]}>
+      <Svg width="100%" height="100%">
+        <Path d={path} stroke={drawingColor} strokeWidth="2" fill="transparent" />
+        <Path d={drawingPath} stroke={drawingColor} strokeWidth="2" fill="transparent" />
+      </Svg>
+      <View {...panResponder.panHandlers} style={styles.canvas} />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={clearCanvas} style={styles.clearButton}>
+          <Text style={styles.clearButtonText}>Clear</Text>
+        </TouchableOpacity>
       </View>
-      {/* Clear button */}
-      <TouchableOpacity style={styles.clearButton} onPress={handleClearButtonClick}>
-        <Text style={styles.clearButtonText}>Clear</Text>
-      </TouchableOpacity>
     </View>
   );
 };
 
-// Styles for the component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  svgContainer: {
-    height: height * 0.7,
-    width,
-    borderColor: 'black',
-    backgroundColor: 'white',
-    borderWidth: 1,
+  canvas: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
   },
   clearButton: {
     marginTop: 10,
@@ -91,7 +103,9 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
 });
+
+export default DrawingScreen;
