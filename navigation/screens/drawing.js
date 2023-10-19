@@ -14,27 +14,16 @@ const getRandomColor = () => {
   return color;
 };
 
-// Array of colors for drawing and background
-const rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
-const colorChangeInterval = 3000;
 
 const DrawingScreen = () => {
   // State for managing paths, colors, and drawing status
   const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
-
   const [brushSize, setBrushSize] = useState(2); // Initial brush size
   const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor, setDrawingColor] = useState('black'); // Added drawingColor state
   const [randomBackgroundColor, setRandomBackgroundColor] = useState(getRandomColor());
-
-  const [colorIndex, setColorIndex] = useState(0);
-  const drawingColor = rainbowColors[colorIndex];
-  const backgroundColor = rainbowColors[(colorIndex + 4) % rainbowColors.length];
-  
-  const colorIndexRef = useRef(colorIndex);
-
 
   // Handle drawing move events
   const handlePanResponderMove = (event) => {
