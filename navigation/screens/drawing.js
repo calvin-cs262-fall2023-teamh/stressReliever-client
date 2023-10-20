@@ -3,6 +3,7 @@ import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share } from 'r
 import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
 
+
 const colorChangeInterval = 550; // Change color every 500 nanoseconds
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -13,18 +14,24 @@ const getRandomColor = () => {
   return color;
 };
 
+
+
 const DrawingScreen = () => {
+  // State for managing paths, colors, and drawing status
   const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
+
   const [brushSize, setBrushSize] = useState(2); // Initial brush size
   const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor, setDrawingColor] = useState('black'); // Added drawingColor state
   const [randomBackgroundColor, setRandomBackgroundColor] = useState(getRandomColor());
 
-  const handlePanResponderMove = (event, gestureState) => {
-    const { moveX, moveY } = gestureState;
-    const point = `${moveX},${moveY}`;
+  
+  // Handle drawing move events
+  const handlePanResponderMove = (event) => {
+    const { locationX, locationY } = event.nativeEvent;
+    const point = `${locationX},${locationY -15}`;  
 
     if (drawing) {
       setDrawingPath((prevPath) => `${prevPath} L${point}`);
@@ -34,6 +41,7 @@ const DrawingScreen = () => {
     }
   };
 
+  // Finalize path when drawing ends
   const handlePanResponderRelease = () => {
     setDrawing(false);
     const updatedPath = path + drawingPath;
@@ -42,6 +50,7 @@ const DrawingScreen = () => {
     setDrawingPath('');
   };
 
+  // Clear the drawing canvas
   const clearCanvas = () => {
     setPath('');
     setDrawingPath('');
@@ -71,6 +80,7 @@ const DrawingScreen = () => {
     }
   };
 
+  // Automatically change drawing color
   useEffect(() => {
     const colorInterval = setInterval(() => {
       const backgroundRandomColor = getRandomColor();
@@ -86,6 +96,7 @@ const DrawingScreen = () => {
     };
   }, []);
 
+  // Initialize the pan responder for touch events
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: handlePanResponderMove,
@@ -138,16 +149,16 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   button: {
     backgroundColor: 'black',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
+    paddingVertical: 3,
+    paddingHorizontal: 3,
     borderRadius: 5,
-    marginHorizontal: 5,
+    marginHorizontal: 3,
   },
   buttonText: {
     color: 'white',
