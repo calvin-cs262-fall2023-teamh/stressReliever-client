@@ -14,9 +14,7 @@ const getRandomColor = () => {
   return color;
 };
 
-// Array of colors for drawing and background
-const rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
-const colorChangeInterval = 3000;
+
 
 const DrawingScreen = () => {
   // State for managing paths, colors, and drawing status
@@ -29,13 +27,7 @@ const DrawingScreen = () => {
   const [drawingColor, setDrawingColor] = useState('black'); // Added drawingColor state
   const [randomBackgroundColor, setRandomBackgroundColor] = useState(getRandomColor());
 
-  const [colorIndex, setColorIndex] = useState(0);
-  const drawingColor = rainbowColors[colorIndex];
-  const backgroundColor = rainbowColors[(colorIndex + 4) % rainbowColors.length];
   
-  const colorIndexRef = useRef(colorIndex);
-
-
   // Handle drawing move events
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
@@ -157,16 +149,16 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   button: {
     backgroundColor: 'black',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
+    paddingVertical: 3,
+    paddingHorizontal: 3,
     borderRadius: 5,
-    marginHorizontal: 5,
+    marginHorizontal: 3,
   },
   buttonText: {
     color: 'white',
