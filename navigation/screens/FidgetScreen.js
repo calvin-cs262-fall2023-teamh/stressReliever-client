@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import ToolSquare from '../../fidgetComponents/switch';
 import RoundButtonToolbox from '../../fidgetComponents/buttons';
 import FidgetSpinner from '../../fidgetComponents/Spinner';
@@ -16,7 +16,7 @@ const ToolScreen = () => {
   };
 
   return (
-    <ScrollView>
+    <View>
       <View style={{ flexDirection: 'row' }}>
         <ToolSquare title="Tool 1" size={{ width: 110, height: 110 }} backgroundColor={"red"} />
         <ToolSquare title="Tool 2" size={{ width: 110, height: 110 }} backgroundColor={"blue"}/>
@@ -44,7 +44,7 @@ const ToolScreen = () => {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Joystick />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

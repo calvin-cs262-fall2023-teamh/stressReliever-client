@@ -3,7 +3,7 @@ import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share } from 'r
 import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
 
-const colorChangeInterval = 550; // Change color every 500 nanoseconds
+const colorChangeInterval = 3000; // Change color every 500 nanoseconds
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
   let color = '#';
