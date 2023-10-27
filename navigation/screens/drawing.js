@@ -4,7 +4,7 @@ import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
 
 
-const colorChangeInterval = 550; // Change color every 500 nanoseconds
+const colorChangeInterval = 4000; 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
   let color = '#';
@@ -13,8 +13,6 @@ const getRandomColor = () => {
   }
   return color;
 };
-
-
 
 const DrawingScreen = () => {
   // State for managing paths, colors, and drawing status
@@ -80,6 +78,19 @@ const DrawingScreen = () => {
     }
   };
 
+  const saveDrawing = async () => {
+    if (path) {
+      try {
+        const shareResult = await Share.share({
+          message: path,
+          title: 'Save Drawing',
+        });
+      } catch (error) {
+        console.error('Error saving the drawing:', error);
+      }
+    }
+  };  
+
   // Automatically change drawing color
   useEffect(() => {
     const colorInterval = setInterval(() => {
@@ -119,6 +130,9 @@ const DrawingScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={shareDrawing} style={styles.button}>
           <Text style={styles.buttonText}>Share</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={saveDrawing} style={styles.button}>
+         <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <Picker // Use @react-native-picker/picker
           selectedValue={brushSize}
