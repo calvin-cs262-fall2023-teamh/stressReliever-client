@@ -73,7 +73,7 @@ const DrawingScreen = () => {
           title: 'Share Drawing',
         });
       } catch (error) {
-        console.error('Error sharing the drawing:', error);
+        console.error('Error sharing the drawing made:', error);
       }
     }
   };
