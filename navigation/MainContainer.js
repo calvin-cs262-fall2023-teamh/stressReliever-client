@@ -1,18 +1,18 @@
+// Import necessary libraries and components
 import * as React from 'react';
-
-// React Navigation imports
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-// Icon library for tab bar icons
+import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-// Importing app screens
+// Import screens
 import HomeScreen from './screens/HomeScreen';
 import DrawingScreen from './screens/drawing';
 import FidgetScreen from './screens/FidgetScreen';
 import ColorChangeScreen from './screens/ColorChangeScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import AchievementsScreen from './screens/AchievementsScreen';
 
 // Constants for screen names
 const homeName = "Home";
@@ -21,25 +21,34 @@ const fidgetName = "Fidget";
 const colorChangeName = "ColorChange";
 const profileName = "Profile";
 
-// Create a bottom tab navigator
+// Create a bottom tab navigator and a stack navigator
 const Tab = createBottomTabNavigator();
+const ProfileStack = createStackNavigator();
+
+// ProfileStackNavigator component for nested navigation within the Profile tab
+function ProfileStackNavigator() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="ProfileDetail" component={ProfileScreen} />
+      <ProfileStack.Screen name="Settings" component={SettingsScreen} />
+      <ProfileStack.Screen name="Achievements" component={AchievementsScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+
 
 function MainContainer() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        // Configuring the tab navigator
         initialRouteName={homeName}
         screenOptions={({ route }) => ({
-          // Define the tab bar icon based on the route name
           tabBarIcon: ({ focused, color }) => {
-            // Logic to determine icon name based on current route
             let iconName;
             let rn = route.name;
             let iconSize = focused ? 30 : 25;
             let iconStyle = { marginBottom: -11 };  
             
-            // Mapping route names to icons
             if (rn === homeName) iconName = 'home-outline';
             else if (rn === drawingName) iconName = 'brush-outline';
             else if (rn === fidgetName) iconName = 'reload-outline';  
@@ -53,17 +62,15 @@ function MainContainer() {
           tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: -5 },
         })}>
         
-        {/* Adding screens to the tab navigator */}
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={drawingName} component={DrawingScreen} />
         <Tab.Screen name={fidgetName} component={FidgetScreen} />
         <Tab.Screen name={colorChangeName} component={ColorChangeScreen} />
-        <Tab.Screen name={profileName} component={ProfileScreen} />
+        <Tab.Screen name={profileName} component={ProfileStackNavigator} />
 
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
 
-// Export the main container
 export default MainContainer;
