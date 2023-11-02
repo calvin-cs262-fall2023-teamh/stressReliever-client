@@ -10,14 +10,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // Importing app screens
 import HomeScreen from './screens/HomeScreen';
 import DrawingScreen from './screens/drawing';
-import SpinnerScreen from './screens/SpinnerScreen';
+import FidgetScreen from './screens/FidgetScreen';
 import ColorChangeScreen from './screens/ColorChangeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
 // Constants for screen names
 const homeName = "Home";
 const drawingName = "Draw";
-const spinnerName = "Spinner";
+const fidgetName = "Fidget";
 const colorChangeName = "ColorChange";
 const profileName = "Profile";
 
@@ -42,7 +42,7 @@ function MainContainer() {
             // Mapping route names to icons
             if (rn === homeName) iconName = 'home-outline';
             else if (rn === drawingName) iconName = 'brush-outline';
-            else if (rn === spinnerName) iconName = 'reload-outline';  
+            else if (rn === fidgetName) iconName = 'reload-outline';  
             else if (rn === colorChangeName) iconName = 'color-palette-outline'; 
             else if (rn === profileName) iconName = 'person-outline';
 
@@ -56,7 +56,7 @@ function MainContainer() {
         {/* Adding screens to the tab navigator */}
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={drawingName} component={DrawingScreen} />
-        <Tab.Screen name={spinnerName} component={SpinnerScreen} />
+        <Tab.Screen name={fidgetName} component={FidgetScreen} />
         <Tab.Screen name={colorChangeName} component={ColorChangeScreen} />
         <Tab.Screen name={profileName} component={ProfileScreen} />
 
