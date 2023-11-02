@@ -29,7 +29,11 @@ const ProfileStack = createStackNavigator();
 function ProfileStackNavigator() {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen name="ProfileDetail" component={ProfileScreen} />
+      <ProfileStack.Screen 
+        name="Profile" 
+        component={ProfileScreen}
+        options={{ headerShown: false }} // Add this line
+      />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} />
       <ProfileStack.Screen name="Achievements" component={AchievementsScreen} />
     </ProfileStack.Navigator>
