@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share } from 'react-native';
+import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share, Dimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 
-const colorChangeInterval = 4000; 
+
+const colorChangeInterval = 5000; 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
   let color = '#';
@@ -19,7 +22,7 @@ const DrawingScreen = () => {
   const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
-
+  const navigation = useNavigation();
   const [brushSize, setBrushSize] = useState(2); // Initial brush size
   const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor, setDrawingColor] = useState('black'); // Added drawingColor state
@@ -116,10 +119,16 @@ const DrawingScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: randomBackgroundColor }]}>
-      <Svg width="100%" height="100%">
+      <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').height}>
         <Path d={path} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
+      <TouchableOpacity
+        style={styles.backIcon}
+        onPress={() => navigation.goBack()}
+      >
+        <Icon name="arrow-back" size={30} color="white" />
+      </TouchableOpacity>
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={clearCanvas} style={styles.button}>
@@ -181,6 +190,11 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: 150,
+  },
+  backIcon: {
+    position: 'absolute',
+    top: 5, 
+    left: 5, 
   },
 });
 
