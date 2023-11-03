@@ -30,9 +30,9 @@ function ProfileStackNavigator() {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen 
-        name="Profile" 
+        name="ProfileDetail" // Changed from "Profile" to "ProfileDetail"
         component={ProfileScreen}
-        options={{ headerShown: false }} // Add this line
+        options={{ headerShown: false }}
       />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} />
       <ProfileStack.Screen name="Achievements" component={AchievementsScreen} />
@@ -71,7 +71,6 @@ function MainContainer() {
         <Tab.Screen name={fidgetName} component={FidgetScreen} />
         <Tab.Screen name={colorChangeName} component={ColorChangeScreen} />
         <Tab.Screen name={profileName} component={ProfileStackNavigator} />
-
       </Tab.Navigator>
     </NavigationContainer>
   );
