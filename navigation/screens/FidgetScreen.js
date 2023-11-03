@@ -4,7 +4,8 @@ import ToolSquare from '../../fidgetComponents/switch';
 import RoundButtonToolbox from '../../fidgetComponents/buttons';
 import FidgetSpinner from '../../fidgetComponents/Spinner';
 import VentScreen from '../../fidgetComponents/Vent';
-import Joystick from '../../fidgetComponents/joyStick'
+import Joystick from '../../fidgetComponents/joyStick';
+import BreathingTool from '../../fidgetComponents/BreathingTool'
 
 
 const ToolScreen = () => {
@@ -20,7 +21,7 @@ const ToolScreen = () => {
       <View style={{ flexDirection: 'row' }}>
         <ToolSquare title="Tool 1" size={{ width: 110, height: 110 }} backgroundColor={"red"} />
         <ToolSquare title="Tool 2" size={{ width: 110, height: 110 }} backgroundColor={"blue"}/>
-        <ToolSquare title="Tool 3" size={{ width: 110, height: 110 }} backgroundColor={"purple"}/>
+        <BreathingTool size={{ width: 110, height: 110}} />
       </View>
       <TouchableOpacity onPress={toggleVentScreen}>
         <View style={{ 
