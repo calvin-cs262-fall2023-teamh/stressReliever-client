@@ -20,8 +20,8 @@ const ToolScreen = () => {
     <View>
       <View style={{ flexDirection: 'row' }}>
         <ToolSquare title="Tool 1" size={{ width: 110, height: 110 }} backgroundColor={"red"} />
-        <ToolSquare title="Tool 2" size={{ width: 110, height: 110 }} backgroundColor={"blue"}/>
         <BreathingTool size={{ width: 110, height: 110}} />
+        <ToolSquare title="Tool 2" size={{ width: 110, height: 110 }} backgroundColor={"blue"}/>
       </View>
       <TouchableOpacity onPress={toggleVentScreen}>
         <View style={{ 
