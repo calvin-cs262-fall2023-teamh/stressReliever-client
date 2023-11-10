@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/Ionicons'; // Added Icon import
+import { useNavigation } from '@react-navigation/native'; // Added useNavigation import
 
 const DrawingScreen = () => {
   const [drawingPath, setDrawingPath] = useState('');
@@ -10,6 +12,7 @@ const DrawingScreen = () => {
   const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor, setDrawingColor] = useState('black');
 
+  const navigation = useNavigation(); // Added navigation hook
 
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
@@ -63,10 +66,17 @@ const DrawingScreen = () => {
   };
 
   const saveDrawing = async () => {
-    // Your save logic here
-    console.log('Save button pressed');
+    if (path) {
+      try {
+        const shareResult = await Share.share({
+          message: path,
+          title: 'Save Drawing',
+        });
+      } catch (error) {
+        console.error('Error saving the drawing:', error);
+      }
+    }
   };
-
 
   const handleColorChange = (color) => {
     setDrawingColor(color);
@@ -79,13 +89,11 @@ const DrawingScreen = () => {
   });
 
   return (
-
     <View style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
       <Svg width="100%" height="100%">
         {pathHistory.map((item, index) => (
           <Path key={index} d={item.path} stroke={item.color} strokeWidth={brushSize} fill="transparent" />
         ))}
-
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
       <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
@@ -106,11 +114,9 @@ const DrawingScreen = () => {
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <Picker
-
           selectedValue={drawingColor}
           onValueChange={(itemValue, itemIndex) => handleColorChange(itemValue)}
           style={[styles.picker, { backgroundColor: drawingColor }]}
-
         >
           <Picker.Item label="Red" value="red" />
           <Picker.Item label="Blue" value="blue" />
