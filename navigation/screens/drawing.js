@@ -10,6 +10,7 @@ const DrawingScreen = () => {
   const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor, setDrawingColor] = useState('black');
 
+
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
     const point = `${locationX},${locationY - 15}`;
@@ -17,7 +18,9 @@ const DrawingScreen = () => {
     if (drawing) {
       setDrawingPath((prevPath) => `${prevPath} L${point}`);
     } else {
-      setDrawingPath((prevPath) => (prevPath === '' ? `M${point}` : `${prevPath} L${point}`));
+      setDrawingPath((prevPath) =>
+        prevPath === '' ? `M${point}` : `${prevPath} L${point}`
+      );
       setDrawing(true);
     }
   };
@@ -64,6 +67,7 @@ const DrawingScreen = () => {
     console.log('Save button pressed');
   };
 
+
   const handleColorChange = (color) => {
     setDrawingColor(color);
   };
@@ -75,13 +79,18 @@ const DrawingScreen = () => {
   });
 
   return (
+
     <View style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
       <Svg width="100%" height="100%">
         {pathHistory.map((item, index) => (
           <Path key={index} d={item.path} stroke={item.color} strokeWidth={brushSize} fill="transparent" />
         ))}
+
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
+      <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
+        <Icon name="arrow-back" size={30} color="white" />
+      </TouchableOpacity>
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={clearCanvas} style={styles.button}>
@@ -97,9 +106,11 @@ const DrawingScreen = () => {
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <Picker
+
           selectedValue={drawingColor}
           onValueChange={(itemValue, itemIndex) => handleColorChange(itemValue)}
           style={[styles.picker, { backgroundColor: drawingColor }]}
+
         >
           <Picker.Item label="Red" value="red" />
           <Picker.Item label="Blue" value="blue" />
@@ -145,6 +156,11 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: 150,
+  },
+  backIcon: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
   },
 });
 
