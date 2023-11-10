@@ -25,7 +25,6 @@ const DrawingScreen = () => {
   const handlePanResponderRelease = () => {
     setDrawing(false);
     if (drawingPath) {
-      // Create a new path with the current color and append it to the history
       const updatedPath = `${drawingPath}`;
       setPathHistory([...pathHistory, { path: updatedPath, color: drawingColor }]);
     }
@@ -60,6 +59,11 @@ const DrawingScreen = () => {
     }
   };
 
+  const saveDrawing = async () => {
+    // Your save logic here
+    console.log('Save button pressed');
+  };
+
   const handleColorChange = (color) => {
     setDrawingColor(color);
   };
@@ -73,11 +77,9 @@ const DrawingScreen = () => {
   return (
     <View style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
       <Svg width="100%" height="100%">
-        {/* Render each path in the history with its respective color */}
         {pathHistory.map((item, index) => (
           <Path key={index} d={item.path} stroke={item.color} strokeWidth={brushSize} fill="transparent" />
         ))}
-        {/* Render the current drawing path with the selected color */}
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
       <View {...panResponder.panHandlers} style={styles.canvas} />
@@ -90,6 +92,9 @@ const DrawingScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={shareDrawing} style={styles.button}>
           <Text style={styles.buttonText}>Share</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={saveDrawing} style={styles.button}>
+          <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <Picker
           selectedValue={drawingColor}
