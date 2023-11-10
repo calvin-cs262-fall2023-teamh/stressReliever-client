@@ -1,5 +1,6 @@
 // Import React library
 import * as React from 'react';
+import { DarkModeProvider } from './color/DarkModeContext';
 
 // Import main navigation container
 import MainContainer from './navigation/MainContainer';
@@ -7,7 +8,9 @@ import MainContainer from './navigation/MainContainer';
 // Main app component
 function App() {
   return (
-    <MainContainer/>  // Display the main navigation container
+    <DarkModeProvider>
+      <MainContainer/>
+    </DarkModeProvider>
   );
 }
 

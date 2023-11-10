@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const AchievementsScreen = () => {
+const SettingsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Achievements will be available soon!</Text>
+      <Text style={styles.text}>Settings will be available soon!</Text>
     </View>
   );
 };
@@ -14,12 +14,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: 'black',  // Set the background color to black
   },
   text: {
     fontSize: 18,
-    color: '#555',
+    color: 'white',  // Set the text color to white
   },
 });
 
-export default AchievementsScreen;
+export default SettingsScreen;

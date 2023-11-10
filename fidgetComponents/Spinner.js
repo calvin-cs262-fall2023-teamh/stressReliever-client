@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   spinner: {
-    width: 200,
-    height: 200,
+    width: 120,
+    height: 120,
     borderStyle: 'solid',
     borderTopWidth: 10,
     borderRightWidth: 10,

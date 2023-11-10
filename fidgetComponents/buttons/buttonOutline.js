@@ -17,7 +17,6 @@ const RoundButton = ({ title, onPress, backgroundColor }) => {
           margin: 10, // Adjust the margin as needed
         }}
       >
-        <Text>{title}</Text>
       </View>
     </TouchableOpacity>
   );

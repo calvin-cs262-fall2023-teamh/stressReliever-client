@@ -14,7 +14,7 @@ const VentScreen = ({ onClose }) => {
 
   return (
     <TouchableOpacity onPress={handleSend}>
-      <View style={{ padding: 20, backgroundColor: 'lightblue', borderRadius: 10, margin: 10 }}>
+      <View style={{ padding: 20, backgroundColor: 'lightblue', borderRadius: 20, margin: 20 }}>
         <Text style={{ fontSize: 18, marginBottom: 10 }}>Type how you feel and then release it</Text>
         <TextInput
           style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingLeft: 10 }}
