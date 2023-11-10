@@ -8,7 +8,7 @@ const BreathingTool = ({ size }) => {
       style={{
         width: size.width,
         height: size.height,
-        backgroundColor: 'black',
+        backgroundColor: '#333333',
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',

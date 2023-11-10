@@ -1,11 +1,8 @@
-// Import necessary libraries and components
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-// Import screens
 import HomeScreen from './screens/HomeScreen';
 import DrawingScreen from './screens/drawing';
 import FidgetScreen from './screens/FidgetScreen';
@@ -14,23 +11,20 @@ import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AchievementsScreen from './screens/AchievementsScreen';
 
-// Constants for screen names
 const homeName = "Home";
 const drawingName = "Draw";
 const fidgetName = "Fidget";
 const colorChangeName = "ColorChange";
 const profileName = "Profile";
 
-// Create a bottom tab navigator and a stack navigator
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
 
-// ProfileStackNavigator component for nested navigation within the Profile tab
 function ProfileStackNavigator() {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen 
-        name="ProfileDetail" // Changed from "Profile" to "ProfileDetail"
+        name="ProfileDetail"
         component={ProfileScreen}
         options={{ headerShown: false }}
       />
@@ -39,7 +33,6 @@ function ProfileStackNavigator() {
     </ProfileStack.Navigator>
   );
 }
-
 
 function MainContainer() {
   return (
@@ -51,7 +44,7 @@ function MainContainer() {
             let iconName;
             let rn = route.name;
             let iconSize = focused ? 30 : 25;
-            let iconStyle = { marginBottom: -11 };  
+            let iconStyle = { marginBottom: -11 }; 
             
             if (rn === homeName) iconName = 'home-outline';
             else if (rn === drawingName) iconName = 'brush-outline';
@@ -63,7 +56,7 @@ function MainContainer() {
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'grey',
-          tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: -5 },
+          tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: 0 },
         })}>
         
         <Tab.Screen name={homeName} component={HomeScreen} />

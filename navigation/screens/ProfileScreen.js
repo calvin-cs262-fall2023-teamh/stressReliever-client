@@ -1,20 +1,119 @@
-// Importing necessary libraries and components
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { differenceInSeconds } from 'date-fns';
 import AppStateListener from 'react-native-appstate-listener';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import DarkModeContext from '../../color/DarkModeContext';
 
-// ProfileScreen component
 const ProfileScreen = ({ navigation }) => {
-  // State and ref variables
+  const { darkMode } = useContext(DarkModeContext);
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: darkMode ? '#000000' : '#F9F9F9', // Apply dark mode background color
+    },
+    contentContainer: {
+      paddingBottom: 20,
+    },
+    profileImage: {
+      width: 120,
+      height: 120,
+      borderRadius: 60,
+      alignSelf: 'center',
+      marginTop: 40,
+      marginBottom: 20,
+    },
+    infoContainer: {
+      alignItems: 'center',
+      marginBottom: 20,
+    },
+    name: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: darkMode ? '#FFFFFF' : '#333', // Apply dark mode text color
+    },
+    email: {
+      fontSize: 16,
+      color: darkMode ? '#CCCCCC' : '#777', // Apply dark mode text color
+    },
+    button: {
+      backgroundColor: '#800000',
+      padding: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginHorizontal: 40,
+      marginBottom: 30,
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    section: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 20,
+      backgroundColor: '#5A5A5A',
+      marginBottom: 20,
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      elevation: 5,
+    },
+    sectionIcon: {
+      marginRight: 10,
+    },
+    sectionContent: {
+      flex: 1,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: darkMode ? '#FFFFFF' : '#333', // Apply dark mode text color
+      marginBottom: 10,
+    },
+    sectionSubtitle: {
+      fontSize: 14,
+      color: darkMode ? '#FFFFFF' : '#777', // Apply dark mode text color
+    },
+    activityText: {
+      fontSize: 16,
+      color: darkMode ? '#FFFFFF' : '#555', // Apply dark mode text color
+      marginBottom: 10,
+    },
+    timerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    input: {
+      flex: 1,
+      borderColor: darkMode ? '#FFFFFF' : '#ccc', // Apply dark mode border color
+      borderWidth: 1,
+      marginRight: 10,
+      padding: 8,
+      borderRadius: 5,
+      color: darkMode ? '#FFFFFF' : '#555', // Apply dark mode text color
+    },
+    footer: {
+      alignItems: 'center',
+      marginTop: 20,
+    },
+    footerText: {
+      fontSize: 16,
+      color: darkMode ? '#CCCCCC' : '#888', // Apply dark mode text color
+      textAlign: 'center',
+    },
+  });
+
   const [elapsed, setElapsed] = useState(0);
   const [personalTimer, setPersonalTimer] = useState('');
   const [remainingTime, setRemainingTime] = useState(null);
   const intervalRef = useRef(null);
 
-  // Record the start time when the app becomes active
   const recordStartTime = async () => {
     try {
       const now = new Date();
@@ -24,7 +123,6 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  // Calculate and return the elapsed time since the app became active
   const getElapsedTime = async () => {
     try {
       const startTime = await AsyncStorage.getItem('@start_time');
@@ -35,19 +133,16 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  // Start the timer to update the elapsed time every second
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
       getElapsedTime().then((elapsedTime) => setElapsed(elapsedTime));
     }, 1000);
   };
 
-  // Stop the timer when the component is unmounted
   const stopTimer = () => {
     clearInterval(intervalRef.current);
   };
 
-  // Set a personal timer and show an alert when the time is up
   const handleSetTimer = () => {
     const time = parseInt(personalTimer, 10);
     if (!isNaN(time) && time > 0) {
@@ -59,7 +154,6 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  // Update the remaining time of the personal timer and show an alert when the time is up
   useEffect(() => {
     if (remainingTime !== null) {
       if (remainingTime === 0) {
@@ -74,7 +168,6 @@ const ProfileScreen = ({ navigation }) => {
     }
   }, [remainingTime]);
 
-  // Record start time and start the timer when the component mounts
   useEffect(() => {
     recordStartTime();
     startTimer();
@@ -88,7 +181,7 @@ const ProfileScreen = ({ navigation }) => {
       {/* Profile image */}
       <Image 
         style={styles.profileImage}
-        source={{ uri: 'https://placekitten.com/150/150' }} // Placeholder image with a cute kitten
+        source={{ uri: 'https://hips.hearstapps.com/hmg-prod/images/john-calvin-gettyimages-51246861.jpg?crop=1xw:1.0xh;center,top&resize=640:*' }} // Placeholder image with a cute kitten
       />
 
       {/* User information */}

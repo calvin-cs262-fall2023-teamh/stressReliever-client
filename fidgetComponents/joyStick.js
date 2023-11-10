@@ -85,9 +85,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 60,
-    marginTop: 30,
-    backgroundColor: 'lightgrey',
+    paddingHorizontal: 50,
+    marginTop: 10,
+    backgroundColor: '#333333',
   },
   joystickContainer: {
     width: 100,

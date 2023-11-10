@@ -17,6 +17,8 @@ const ToolSquare = ({ title, size, backgroundColor }) => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 10, // Added padding to create space for the Switch component
+        borderRadius: 10, // Added borderRadius to match the grey box style
       }}
     >
       {/* Add content for the square here */}
