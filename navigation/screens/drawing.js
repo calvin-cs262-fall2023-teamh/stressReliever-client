@@ -1,45 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  PanResponder,
+  TouchableOpacity,
+  Text,
+  Share,
+  Dimensions,
+} from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
+import { Picker } from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
+const colorChangeInterval = 5000; 
 
-const colorChangeInterval = 4000; 
 const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+  const getRandomValue = () => Math.floor(Math.random() * 256);
+  const red = getRandomValue();
+  const green = getRandomValue();
+  const blue = getRandomValue();
+  return `rgb(${red},${green},${blue})`;
 };
 
 const DrawingScreen = () => {
-  // State for managing paths, colors, and drawing status
   const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
-
-  const [brushSize, setBrushSize] = useState(2); // Initial brush size
+  const navigation = useNavigation();
+  const [brushSize, setBrushSize] = useState(2);
   const [pathHistory, setPathHistory] = useState([]);
-  const [drawingColor, setDrawingColor] = useState('black'); // Added drawingColor state
-  const [randomBackgroundColor, setRandomBackgroundColor] = useState(getRandomColor());
+  const [drawingColor, setDrawingColor] = useState('black');
+  const [backgroundColor, setBackgroundColor] = useState(getRandomColor());
 
-  
-  // Handle drawing move events
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
-    const point = `${locationX},${locationY -15}`;  
+    const point = `${locationX},${locationY - 15}`;
 
     if (drawing) {
       setDrawingPath((prevPath) => `${prevPath} L${point}`);
     } else {
-      setDrawingPath((prevPath) => (prevPath === '' ? `M${point}` : `${prevPath} L${point}`));
+      setDrawingPath((prevPath) =>
+        prevPath === '' ? `M${point}` : `${prevPath} L${point}`
+      );
       setDrawing(true);
     }
   };
 
-  // Finalize path when drawing ends
   const handlePanResponderRelease = () => {
     setDrawing(false);
     const updatedPath = path + drawingPath;
@@ -48,7 +55,6 @@ const DrawingScreen = () => {
     setDrawingPath('');
   };
 
-  // Clear the drawing canvas
   const clearCanvas = () => {
     setPath('');
     setDrawingPath('');
@@ -59,9 +65,9 @@ const DrawingScreen = () => {
   const undoLastAction = () => {
     if (pathHistory.length > 0) {
       const updatedHistory = [...pathHistory];
-      updatedHistory.pop(); // Remove the last path
+      updatedHistory.pop();
       setPathHistory(updatedHistory);
-      setPath(updatedHistory[updatedHistory.length - 1] || ''); // Update path
+      setPath(updatedHistory[updatedHistory.length - 1] || '');
     }
   };
 
@@ -73,7 +79,7 @@ const DrawingScreen = () => {
           title: 'Share Drawing',
         });
       } catch (error) {
-        console.error('Error sharing the drawing made:', error);
+        console.error('Error sharing the drawing:', error);
       }
     }
   };
@@ -89,17 +95,11 @@ const DrawingScreen = () => {
         console.error('Error saving the drawing:', error);
       }
     }
-  };  
+  };
 
-  // Automatically change drawing color
   useEffect(() => {
     const colorInterval = setInterval(() => {
-      const backgroundRandomColor = getRandomColor();
-      setRandomBackgroundColor(backgroundRandomColor);
-
-      // Update the drawing color with a random color
-      const randomDrawingColor = getRandomColor();
-      setDrawingColor(randomDrawingColor);
+      setBackgroundColor(getRandomColor());
     }, colorChangeInterval);
 
     return () => {
@@ -107,7 +107,6 @@ const DrawingScreen = () => {
     };
   }, []);
 
-  // Initialize the pan responder for touch events
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: handlePanResponderMove,
@@ -115,11 +114,14 @@ const DrawingScreen = () => {
   });
 
   return (
-    <View style={[styles.container, { backgroundColor: randomBackgroundColor }]}>
-      <Svg width="100%" height="100%">
+    <View style={[styles.container, { backgroundColor: 'white' }]}>
+      <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').height}>
         <Path d={path} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
+      <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
+        <Icon name="arrow-back" size={30} color="white" />
+      </TouchableOpacity>
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={clearCanvas} style={styles.button}>
@@ -132,9 +134,9 @@ const DrawingScreen = () => {
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={saveDrawing} style={styles.button}>
-         <Text style={styles.buttonText}>Save</Text>
+          <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
-        <Picker // Use @react-native-picker/picker
+        <Picker
           selectedValue={brushSize}
           onValueChange={(itemValue, itemIndex) => setBrushSize(itemValue)}
           style={styles.picker}
@@ -181,6 +183,11 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: 150,
+  },
+  backIcon: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
   },
 });
 
