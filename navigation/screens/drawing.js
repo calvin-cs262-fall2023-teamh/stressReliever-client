@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  StyleSheet,
+  PanResponder,
+  TouchableOpacity,
+  Text,
+  Share,
+  Dimensions,
+  Animated,
+} from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons'; // Added Icon import
-import { useNavigation } from '@react-navigation/native'; // Added useNavigation import
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 const DrawingScreen = () => {
+  const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
+  const navigation = useNavigation();
   const [brushSize, setBrushSize] = useState(2);
   const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor, setDrawingColor] = useState('black');
+  const backgroundColor = useRef(new Animated.Value(0)).current;
 
-  const navigation = useNavigation(); // Added navigation hook
+  useEffect(() => {
+    const backgroundChangeInterval = setInterval(() => {
+      Animated.timing(backgroundColor, {
+        toValue: backgroundColor._value === 0 ? 1 : 0,
+        duration: 30000, // 30 seconds for the transition from gold to maroon
+        useNativeDriver: false,
+      }).start();
+    }, 30000); // Repeat every 30 seconds
+  
+    return () => clearInterval(backgroundChangeInterval);
+  }, [backgroundColor])
 
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
@@ -30,14 +52,14 @@ const DrawingScreen = () => {
 
   const handlePanResponderRelease = () => {
     setDrawing(false);
-    if (drawingPath) {
-      const updatedPath = `${drawingPath}`;
-      setPathHistory([...pathHistory, { path: updatedPath, color: drawingColor }]);
-    }
+    const updatedPath = path + drawingPath;
+    setPath(updatedPath);
+    setPathHistory([...pathHistory, updatedPath]);
     setDrawingPath('');
   };
 
   const clearCanvas = () => {
+    setPath('');
     setDrawingPath('');
     setDrawing(false);
     setPathHistory([]);
@@ -48,15 +70,15 @@ const DrawingScreen = () => {
       const updatedHistory = [...pathHistory];
       updatedHistory.pop();
       setPathHistory(updatedHistory);
+      setPath(updatedHistory[updatedHistory.length - 1] || '');
     }
   };
 
   const shareDrawing = async () => {
-    const currentPath = pathHistory.map((item) => item.path).join(' ');
-    if (currentPath) {
+    if (path) {
       try {
-        await Share.share({
-          message: currentPath,
+        const shareResult = await Share.share({
+          message: path,
           title: 'Share Drawing',
         });
       } catch (error) {
@@ -78,22 +100,21 @@ const DrawingScreen = () => {
     }
   };
 
-  const handleColorChange = (color) => {
-    setDrawingColor(color);
-  };
-
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: handlePanResponderMove,
     onPanResponderRelease: handlePanResponderRelease,
   });
 
+  const interpolatedBackgroundColor = backgroundColor.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['gold', 'maroon'],
+  });
+
   return (
-    <View style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
-      <Svg width="100%" height="100%">
-        {pathHistory.map((item, index) => (
-          <Path key={index} d={item.path} stroke={item.color} strokeWidth={brushSize} fill="transparent" />
-        ))}
+    <Animated.View style={[styles.container, { backgroundColor: interpolatedBackgroundColor }]}>
+      <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').height}>
+        <Path d={path} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
       <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
@@ -114,20 +135,18 @@ const DrawingScreen = () => {
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <Picker
-          selectedValue={drawingColor}
-          onValueChange={(itemValue, itemIndex) => handleColorChange(itemValue)}
-          style={[styles.picker, { backgroundColor: drawingColor }]}
+          selectedValue={brushSize}
+          onValueChange={(itemValue, itemIndex) => setBrushSize(itemValue)}
+          style={styles.picker}
         >
-          <Picker.Item label="Red" value="red" />
-          <Picker.Item label="Blue" value="blue" />
-          <Picker.Item label="Yellow" value="yellow" />
-          <Picker.Item label="Orange" value="orange" />
-          <Picker.Item label="Green" value="green" />
-          <Picker.Item label="Purple" value="purple" />
-          <Picker.Item label="Black" value="black" />
+          <Picker.Item label="Brush Size: 2" value={2} />
+          <Picker.Item label="Brush Size: 4" value={4} />
+          <Picker.Item label="Brush Size: 6" value={6} />
+          <Picker.Item label="Brush Size: 8" value={8} />
+          <Picker.Item label="Brush Size: 10" value={10} />
         </Picker>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -152,7 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     paddingVertical: 3,
     paddingHorizontal: 3,
-    borderRadius: 10,
+    borderRadius: 5,
     marginHorizontal: 3,
   },
   buttonText: {
