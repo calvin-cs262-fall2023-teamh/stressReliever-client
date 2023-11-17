@@ -1,55 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, PanResponder, TouchableOpacity, Text, Share } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  StyleSheet,
+  PanResponder,
+  TouchableOpacity,
+  Text,
+  Share,
+  Dimensions,
+  Animated,
+} from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
-
-
-const colorChangeInterval = 550; // Change color every 500 nanoseconds
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
-// Array of colors for drawing and background
-const rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
-const colorChangeInterval = 3000;
+import { Picker } from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 const DrawingScreen = () => {
-  // State for managing paths, colors, and drawing status
   const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
-
-  const [brushSize, setBrushSize] = useState(2); // Initial brush size
+  const navigation = useNavigation();
+  const [brushSize, setBrushSize] = useState(2);
   const [pathHistory, setPathHistory] = useState([]);
-  const [drawingColor, setDrawingColor] = useState('black'); // Added drawingColor state
-  const [randomBackgroundColor, setRandomBackgroundColor] = useState(getRandomColor());
+  const [drawingColor, setDrawingColor] = useState('black');
+  const backgroundColor = useRef(new Animated.Value(0)).current;
 
-  const [colorIndex, setColorIndex] = useState(0);
-  const drawingColor = rainbowColors[colorIndex];
-  const backgroundColor = rainbowColors[(colorIndex + 4) % rainbowColors.length];
+  useEffect(() => {
+    const backgroundChangeInterval = setInterval(() => {
+      Animated.timing(backgroundColor, {
+        toValue: backgroundColor._value === 0 ? 1 : 0,
+        duration: 30000, // 30 seconds for the transition from gold to maroon
+        useNativeDriver: false,
+      }).start();
+    }, 30000); // Repeat every 30 seconds
   
-  const colorIndexRef = useRef(colorIndex);
+    return () => clearInterval(backgroundChangeInterval);
+  }, [backgroundColor])
 
-
-  // Handle drawing move events
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
-    const point = `${locationX},${locationY -15}`;  
+    const point = `${locationX},${locationY - 15}`;
 
     if (drawing) {
       setDrawingPath((prevPath) => `${prevPath} L${point}`);
     } else {
-      setDrawingPath((prevPath) => (prevPath === '' ? `M${point}` : `${prevPath} L${point}`));
+      setDrawingPath((prevPath) =>
+        prevPath === '' ? `M${point}` : `${prevPath} L${point}`
+      );
       setDrawing(true);
     }
   };
 
-  // Finalize path when drawing ends
   const handlePanResponderRelease = () => {
     setDrawing(false);
     const updatedPath = path + drawingPath;
@@ -58,7 +58,6 @@ const DrawingScreen = () => {
     setDrawingPath('');
   };
 
-  // Clear the drawing canvas
   const clearCanvas = () => {
     setPath('');
     setDrawingPath('');
@@ -69,9 +68,9 @@ const DrawingScreen = () => {
   const undoLastAction = () => {
     if (pathHistory.length > 0) {
       const updatedHistory = [...pathHistory];
-      updatedHistory.pop(); // Remove the last path
+      updatedHistory.pop();
       setPathHistory(updatedHistory);
-      setPath(updatedHistory[updatedHistory.length - 1] || ''); // Update path
+      setPath(updatedHistory[updatedHistory.length - 1] || '');
     }
   };
 
@@ -88,35 +87,39 @@ const DrawingScreen = () => {
     }
   };
 
-  // Automatically change drawing color
-  useEffect(() => {
-    const colorInterval = setInterval(() => {
-      const backgroundRandomColor = getRandomColor();
-      setRandomBackgroundColor(backgroundRandomColor);
+  const saveDrawing = async () => {
+    if (path) {
+      try {
+        const shareResult = await Share.share({
+          message: path,
+          title: 'Save Drawing',
+        });
+      } catch (error) {
+        console.error('Error saving the drawing:', error);
+      }
+    }
+  };
 
-      // Update the drawing color with a random color
-      const randomDrawingColor = getRandomColor();
-      setDrawingColor(randomDrawingColor);
-    }, colorChangeInterval);
-
-    return () => {
-      clearInterval(colorInterval);
-    };
-  }, []);
-
-  // Initialize the pan responder for touch events
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: handlePanResponderMove,
     onPanResponderRelease: handlePanResponderRelease,
   });
 
+  const interpolatedBackgroundColor = backgroundColor.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['gold', 'maroon'],
+  });
+
   return (
-    <View style={[styles.container, { backgroundColor: randomBackgroundColor }]}>
-      <Svg width="100%" height="100%">
+    <Animated.View style={[styles.container, { backgroundColor: interpolatedBackgroundColor }]}>
+      <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').height}>
         <Path d={path} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
+      <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
+        <Icon name="arrow-back" size={30} color="white" />
+      </TouchableOpacity>
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={clearCanvas} style={styles.button}>
@@ -128,7 +131,10 @@ const DrawingScreen = () => {
         <TouchableOpacity onPress={shareDrawing} style={styles.button}>
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>
-        <Picker // Use @react-native-picker/picker
+        <TouchableOpacity onPress={saveDrawing} style={styles.button}>
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+        <Picker
           selectedValue={brushSize}
           onValueChange={(itemValue, itemIndex) => setBrushSize(itemValue)}
           style={styles.picker}
@@ -140,7 +146,7 @@ const DrawingScreen = () => {
           <Picker.Item label="Brush Size: 10" value={10} />
         </Picker>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -157,16 +163,16 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   button: {
     backgroundColor: 'black',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
+    paddingVertical: 3,
+    paddingHorizontal: 3,
     borderRadius: 5,
-    marginHorizontal: 5,
+    marginHorizontal: 3,
   },
   buttonText: {
     color: 'white',
@@ -175,6 +181,11 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: 150,
+  },
+  backIcon: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
   },
 });
 
