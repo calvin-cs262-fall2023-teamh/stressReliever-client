@@ -10,9 +10,22 @@ import {
   Animated,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Picker } from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
+
+
+const colorChangeInterval = 550; // Change color every 500 nanoseconds
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
+// Array of colors for drawing and background
+const rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
+const colorChangeInterval = 3000;
 
 const DrawingScreen = () => {
   const [path, setPath] = useState('');
@@ -24,18 +37,14 @@ const DrawingScreen = () => {
   const [drawingColor, setDrawingColor] = useState('black');
   const backgroundColor = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    const backgroundChangeInterval = setInterval(() => {
-      Animated.timing(backgroundColor, {
-        toValue: backgroundColor._value === 0 ? 1 : 0,
-        duration: 30000, // 30 seconds for the transition from gold to maroon
-        useNativeDriver: false,
-      }).start();
-    }, 30000); // Repeat every 30 seconds
+  const [colorIndex, setColorIndex] = useState(0);
+  const drawingColor = rainbowColors[colorIndex];
+  const backgroundColor = rainbowColors[(colorIndex + 4) % rainbowColors.length];
   
-    return () => clearInterval(backgroundChangeInterval);
-  }, [backgroundColor])
+  const colorIndexRef = useRef(colorIndex);
 
+
+  // Handle drawing move events
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
     const point = `${locationX},${locationY - 15}`;
