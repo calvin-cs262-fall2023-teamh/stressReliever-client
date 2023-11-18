@@ -9,4 +9,4 @@ const VentScreen = () => {
   );
 };
 
-export default VentScreenComponent;
+export default VentScreen;
