@@ -1,11 +1,11 @@
 import * as React from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
 import { StatusBar } from 'expo-status-bar';
-import { View, StyleSheet } from 'react-native'; // Removed unused imports
+import { View, StyleSheet } from 'react-native';
 import ColorChange from '../../fidgetComponents/ColorChange';
 
 export default function ColorChangeScreen({ navigation }) {
-    // If use navigation, add PropTypes validation here
-    // Otherwise, you can remove 'navigation' from the parameters
+    // Use navigation as needed
 
     return (
         <View style={styles.container}>
@@ -15,13 +15,12 @@ export default function ColorChangeScreen({ navigation }) {
     );
 }
 
+ColorChangeScreen.propTypes = {
+  navigation: PropTypes.object, // Validate navigation prop
+};
+
 const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
 });
-
-// Optional: If using 'navigation', add PropTypes validation
-// ColorChangeScreen.propTypes = {
-//   navigation: PropTypes.object,
-// };
