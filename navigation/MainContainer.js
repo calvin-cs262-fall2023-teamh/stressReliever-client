@@ -11,11 +11,11 @@ import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AchievementsScreen from './screens/AchievementsScreen';
 
-const homeName = "Home";
-const drawingName = "Draw";
-const fidgetName = "Fidget";
-const colorChangeName = "ColorChange";
-const profileName = "Profile";
+const homeName = 'Home';
+const drawingName = 'Draw';
+const fidgetName = 'Fidget';
+const colorChangeName = 'ColorChange';
+const profileName = 'Profile';
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
@@ -23,7 +23,7 @@ const ProfileStack = createStackNavigator();
 function ProfileStackNavigator() {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen 
+      <ProfileStack.Screen
         name="ProfileDetail"
         component={ProfileScreen}
         options={{ headerShown: false }}
@@ -44,12 +44,12 @@ function MainContainer() {
             let iconName;
             let rn = route.name;
             let iconSize = focused ? 30 : 25;
-            let iconStyle = { marginBottom: -11 }; 
-            
+            let iconStyle = { marginBottom: -11 };
+
             if (rn === homeName) iconName = 'home-outline';
             else if (rn === drawingName) iconName = 'brush-outline';
-            else if (rn === fidgetName) iconName = 'reload-outline';  
-            else if (rn === colorChangeName) iconName = 'color-palette-outline'; 
+            else if (rn === fidgetName) iconName = 'reload-outline';
+            else if (rn === colorChangeName) iconName = 'color-palette-outline';
             else if (rn === profileName) iconName = 'person-outline';
 
             return <Ionicons name={iconName} size={iconSize} color={color} style={iconStyle} />;
@@ -58,7 +58,7 @@ function MainContainer() {
           tabBarInactiveTintColor: 'grey',
           tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: 0 },
         })}>
-        
+
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={drawingName} component={DrawingScreen} />
         <Tab.Screen name={fidgetName} component={FidgetScreen} />

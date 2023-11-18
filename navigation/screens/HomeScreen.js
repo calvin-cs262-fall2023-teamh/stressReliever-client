@@ -11,14 +11,14 @@ const HomeScreen = ({ navigation }) => {
       flex: 1,
       backgroundColor: darkMode ? '#000000' : '#EDEDED', // Apply dark mode background color
       paddingHorizontal: 20,
-      paddingTop: 50
+      paddingTop: 50,
     },
     header: {
       fontSize: 28,
       fontWeight: 'bold',
       color: darkMode ? '#800000' : '#333', // Apply dark mode text color
       marginBottom: 40,
-      textAlign: 'center'
+      textAlign: 'center',
     },
     card: {
       backgroundColor: '#5A5A5A',
@@ -37,7 +37,7 @@ const HomeScreen = ({ navigation }) => {
       elevation: 4,
     },
     cardTextContainer: {
-      marginLeft: 15
+      marginLeft: 15,
     },
     cardTitle: {
       fontSize: 22,
@@ -47,18 +47,18 @@ const HomeScreen = ({ navigation }) => {
     cardDetail: {
       fontSize: 16,
       color: darkMode ? '#ffffff' : '#777', // Apply dark mode text color
-      marginTop: 5
+      marginTop: 5,
     },
     footer: {
       flex: 1,
       justifyContent: 'flex-end',
-      marginBottom: 30
+      marginBottom: 30,
     },
     footerText: {
       fontSize: 16,
       color: darkMode ? '#888' : '#888', // Apply dark mode text color
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+    },
   });
 
   return (

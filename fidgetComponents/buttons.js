@@ -12,12 +12,12 @@ const RoundButtonToolbox = () => {
   return (
     <View style={{ flexDirection: 'row', padding: 15 }}>
       <View style={{ flexDirection: 'column' }}>
-        <RoundButton title="1" onPress={() => handleButtonPress(1)} backgroundColor={"red"} />
-        <RoundButton title="3" onPress={() => handleButtonPress(3)} backgroundColor={"blue"}/>
+        <RoundButton title='1' onPress={() => handleButtonPress(1)} backgroundColor={'red'} />
+        <RoundButton title='3' onPress={() => handleButtonPress(3)} backgroundColor={'blue'}/>
       </View>
       <View style={{ flexDirection: 'column' }}>
-        <RoundButton title="2" onPress={() => handleButtonPress(2)} backgroundColor={"yellow"} />
-        <RoundButton title="4" onPress={() => handleButtonPress(4)} backgroundColor={"green"} />
+        <RoundButton title='2' onPress={() => handleButtonPress(2)} backgroundColor={'yellow'} />
+        <RoundButton title='4' onPress={() => handleButtonPress(4)} backgroundColor={'green'} />
       </View>
     </View>
   );
