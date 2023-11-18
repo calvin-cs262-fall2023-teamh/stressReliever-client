@@ -1,20 +1,32 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
-    node: true, // Add node environment as needed
-  },
-  extends: ['airbnb-base', 'plugin:react/recommended'],
-  parser: '@babel/eslint-parser', // Use Babel parser for parsing JSX
-  parserOptions: {
-    ecmaVersion: 2021,
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
+    "env": {
+        "browser": true,
+        "es2021": true
     },
-  },
-  plugins: ['react'], // Add React plugin
-  rules: {
-    // Add specific rules or overrides as needed
-  },
-};
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "overrides": [
+        {
+            "env": {
+                "node": true
+            },
+            "files": [
+                ".eslintrc.{js,cjs}"
+            ],
+            "parserOptions": {
+                "sourceType": "script"
+            }
+        }
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+    }
+}
