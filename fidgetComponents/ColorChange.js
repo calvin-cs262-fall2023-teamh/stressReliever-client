@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
 const ColorChange = () => {
@@ -18,7 +18,7 @@ const ColorChange = () => {
     'rgb(255,99,71)',
     'rgb(100,149,237)',
     'rgb(255,20,147)',
-    'rgb(50,205,50)'
+    'rgb(50,205,50)',
   ];
 
   useEffect(() => {
@@ -35,14 +35,14 @@ const ColorChange = () => {
     const { locationX, locationY } = e.nativeEvent;
     setTapPosition({ x: locationX, y: locationY });
 
-    circleScale.setValue(0);  // Reset circle scale
+    circleScale.setValue(0); // Reset circle scale
     Animated.timing(circleScale, {
       toValue: 1,
       duration: 2000,
       useNativeDriver: false,
     }).start(() => {
       setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
-      animatedValue.setValue(0);  // Reset background color animation
+      animatedValue.setValue(0); // Reset background color animation
     });
   };
 
@@ -57,12 +57,12 @@ const ColorChange = () => {
     transform: [{ scale: circleScale }],
     position: 'absolute',
     top: tapPosition.y - 1000,
-    left: tapPosition.x - 1000, 
-    width: 2000, 
+    left: tapPosition.x - 1000,
+    width: 2000,
     height: 2000,
     borderRadius: 1000,
     backgroundColor: colors[(colorIndex + 1) % colors.length],
-    opacity: 0.6
+    opacity: 0.6,
   };
 
   return (

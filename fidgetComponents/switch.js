@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { View, Switch } from 'react-native';
 
-const ToolSquare = ({ title, size, backgroundColor }) => {
+const ToolSquare = ({ size, backgroundColor }) => {
   const [switchValue, setSwitchValue] = useState(false);
 
   const toggleSwitch = () => {
@@ -17,17 +18,24 @@ const ToolSquare = ({ title, size, backgroundColor }) => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 10, // Added padding to create space for the Switch component
-        borderRadius: 10, // Added borderRadius to match the grey box style
+        padding: 10,
+        borderRadius: 10,
       }}
     >
-      {/* Add content for the square here */}
       <Switch
         value={switchValue}
         onValueChange={toggleSwitch}
       />
     </View>
   );
+};
+
+ToolSquare.propTypes = {
+  size: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+  }).isRequired,
+  backgroundColor: PropTypes.string.isRequired,
 };
 
 export default ToolSquare;

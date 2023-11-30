@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 import ToolSquare from '../../fidgetComponents/switch';
 import RoundButtonToolbox from '../../fidgetComponents/buttons';
 import FidgetSpinner from '../../fidgetComponents/Spinner';
@@ -62,22 +62,22 @@ const ToolScreen = () => {
     <View style={styles.container}>
       <View style={styles.toolsWrapper}>
         <View style={styles.toolContainer}>
-          <ToolSquare title="Tool 1" size={{ width: 110, height: 110 }} backgroundColor={"red"} />
+          <ToolSquare title='Tool 1' size={{ width: 110, height: 110 }} backgroundColor={'red'} />
         </View>
         <View style={styles.toolContainer}>
-          < BreathingTool size={{ width: 120, height: 130 }} backgroundColor={"blue"} style={{ borderRadius: 20}} />
+          < BreathingTool size={{ width: 120, height: 130 }} backgroundColor={'blue'} style={{ borderRadius: 20}} />
         </View>
         <View style={styles.toolContainer}>
-          <ToolSquare title="Tool 3" size={{ width: 110, height: 110 }} backgroundColor={"green"} />
+          <ToolSquare title='Tool 3' size={{ width: 110, height: 110 }} backgroundColor={'green'} />
         </View>
       </View>
       <TouchableOpacity onPress={toggleVentScreen}>
-        <View style={{ 
-          backgroundColor: 'lightblue', 
-          borderRadius: 10, 
+        <View style={{
+          backgroundColor: 'lightblue',
+          borderRadius: 10,
           padding: 10,
           margin: 10,
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
           <Text style={{ fontSize: 18 }}>Vent here...</Text>
         </View>

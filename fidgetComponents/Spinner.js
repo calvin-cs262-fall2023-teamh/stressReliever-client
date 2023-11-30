@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native'; // Removed TouchableOpacity
 
 const FidgetSpinner = () => {
   // Declare animated value for rotation

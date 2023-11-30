@@ -30,7 +30,7 @@ const DualJoystickContainer = () => {
           dy: joystick1Position.y,
         },
       ],
-      { listener: handleMove1, useNativeDriver: false }
+      { listener: handleMove1, useNativeDriver: false },
     ),
   });
 
@@ -45,7 +45,7 @@ const DualJoystickContainer = () => {
           dy: joystick2Position.y,
         },
       ],
-      { listener: handleMove2, useNativeDriver: false }
+      { listener: handleMove2, useNativeDriver: false },
     ),
   });
 
