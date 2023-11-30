@@ -21,7 +21,7 @@ const DrawingScreen = () => {
   const navigation = useNavigation();
   const [brushSize, setBrushSize] = useState(2);
   const [pathHistory, setPathHistory] = useState([]);
-  //const [drawingColor, setDrawingColor] = useState('black');
+  const [drawingColor, setDrawingColor] = useState('black');
   const backgroundColor = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const DrawingScreen = () => {
   const shareDrawing = async () => {
     if (path) {
       try {
-        await Share.share({ // Remove the shareResult variable
+        const shareResult = await Share.share({
           message: path,
           title: 'Share Drawing',
         });
@@ -90,7 +90,7 @@ const DrawingScreen = () => {
   const saveDrawing = async () => {
     if (path) {
       try {
-        await Share.share({ // Remove the shareResult variable
+        const shareResult = await Share.share({
           message: path,
           title: 'Save Drawing',
         });
@@ -99,7 +99,6 @@ const DrawingScreen = () => {
       }
     }
   };
-
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -137,7 +136,7 @@ const DrawingScreen = () => {
         </TouchableOpacity>
         <Picker
           selectedValue={brushSize}
-          onValueChange={(itemValue) => setBrushSize(itemValue)} // Remove itemIndex
+          onValueChange={(itemValue, itemIndex) => setBrushSize(itemValue)}
           style={styles.picker}
         >
           <Picker.Item label="Brush Size: 2" value={2} />
