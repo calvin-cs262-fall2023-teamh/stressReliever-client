@@ -3,20 +3,20 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DarkModeContext from '../../color/DarkModeContext';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
   const { darkMode } = useContext(DarkModeContext);
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: darkMode ? '#000000' : '#EDEDED', // Apply dark mode background color
+      backgroundColor: darkMode ? '#000000' : '#EDEDED',
       paddingHorizontal: 20,
       paddingTop: 50,
     },
     header: {
       fontSize: 28,
       fontWeight: 'bold',
-      color: darkMode ? '#800000' : '#333', // Apply dark mode text color
+      color: darkMode ? '#800000' : '#333',
       marginBottom: 40,
       textAlign: 'center',
     },
@@ -42,11 +42,11 @@ const HomeScreen = ({ navigation }) => {
     cardTitle: {
       fontSize: 22,
       fontWeight: '600',
-      color: darkMode ? '#ffffff' : '#333', // Apply dark mode text color
+      color: darkMode ? '#ffffff' : '#333',
     },
     cardDetail: {
       fontSize: 16,
-      color: darkMode ? '#ffffff' : '#777', // Apply dark mode text color
+      color: darkMode ? '#ffffff' : '#777',
       marginTop: 5,
     },
     footer: {
@@ -56,14 +56,13 @@ const HomeScreen = ({ navigation }) => {
     },
     footerText: {
       fontSize: 16,
-      color: darkMode ? '#888' : '#888', // Apply dark mode text color
+      color: darkMode ? '#888' : '#888',
       textAlign: 'center',
     },
   });
 
   return (
     <View style={styles.container}>
-
       {/* Header */}
       <Text style={styles.header}>Welcome to MindfulKnight!</Text>
 

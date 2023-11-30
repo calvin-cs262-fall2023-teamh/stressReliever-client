@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { differenceInSeconds } from 'date-fns';
@@ -345,5 +346,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+ProfileScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default ProfileScreen;
