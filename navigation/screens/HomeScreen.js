@@ -16,7 +16,7 @@ const HomeScreen = () => {
     header: {
       fontSize: 28,
       fontWeight: 'bold',
-      color: darkMode ? '#800000' : '#333',
+      color: darkMode ? '#FFFFFF' : '#333', // White for dark mode, dark gray for light mode
       marginBottom: 40,
       textAlign: 'center',
     },
