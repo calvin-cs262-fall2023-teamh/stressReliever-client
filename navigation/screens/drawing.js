@@ -77,7 +77,7 @@ const DrawingScreen = () => {
   const shareDrawing = async () => {
     if (path) {
       try {
-        const shareResult = await Share.share({
+        await Share.share({ // Remove the shareResult variable
           message: path,
           title: 'Share Drawing',
         });
@@ -90,7 +90,7 @@ const DrawingScreen = () => {
   const saveDrawing = async () => {
     if (path) {
       try {
-        const shareResult = await Share.share({
+        await Share.share({ // Remove the shareResult variable
           message: path,
           title: 'Save Drawing',
         });
@@ -99,6 +99,7 @@ const DrawingScreen = () => {
       }
     }
   };
+
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -136,7 +137,7 @@ const DrawingScreen = () => {
         </TouchableOpacity>
         <Picker
           selectedValue={brushSize}
-          onValueChange={(itemValue, itemIndex) => setBrushSize(itemValue)}
+          onValueChange={(itemValue) => setBrushSize(itemValue)} // Remove itemIndex
           style={styles.picker}
         >
           <Picker.Item label="Brush Size: 2" value={2} />
