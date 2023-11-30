@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
 import { View } from 'react-native';
 import BreathingComponent from './Breathing';
 
@@ -12,12 +13,19 @@ const BreathingTool = ({ size }) => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        overflow: 'hidden', // Added to clip content that overflows
+        overflow: 'hidden',
       }}
     >
       <BreathingComponent />
     </View>
   );
+};
+
+BreathingTool.propTypes = {
+  size: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
+  }).isRequired
 };
 
 export default BreathingTool;

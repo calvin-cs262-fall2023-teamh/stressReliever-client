@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
 import { View, TextInput, Button, TouchableOpacity, Text } from 'react-native';
 
 const VentScreen = ({ onClose }) => {
@@ -26,6 +27,11 @@ const VentScreen = ({ onClose }) => {
       </View>
     </TouchableOpacity>
   );
+};
+
+// Define the prop types
+VentScreen.propTypes = {
+  onClose: PropTypes.func.isRequired, // Validate onClose as a required function
 };
 
 export default VentScreen;

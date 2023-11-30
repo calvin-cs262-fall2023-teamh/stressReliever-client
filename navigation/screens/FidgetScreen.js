@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 import ToolSquare from '../../fidgetComponents/switch';
 import RoundButtonToolbox from '../../fidgetComponents/buttons';
 import FidgetSpinner from '../../fidgetComponents/Spinner';

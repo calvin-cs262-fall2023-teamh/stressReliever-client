@@ -1,25 +1,30 @@
-// RoundButton.js
-
 import React from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import PropTypes from 'prop-types'; // Import PropTypes
+import { TouchableOpacity, View } from 'react-native'; // Remove Text import
 
-const RoundButton = ({ title, onPress, backgroundColor }) => {
+const RoundButton = ({ onPress, backgroundColor }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View
         style={{
-          width: 50, // Adjust the width of the button as needed
-          height: 50, // Adjust the height of the button as needed
-          borderRadius: 25, // Make it round by setting half of the width/height as borderRadius
-          backgroundColor: backgroundColor, // Customize the color as needed
+          width: 50,
+          height: 50,
+          borderRadius: 25,
+          backgroundColor: backgroundColor,
           justifyContent: 'center',
           alignItems: 'center',
-          margin: 10, // Adjust the margin as needed
+          margin: 10,
         }}
       >
       </View>
     </TouchableOpacity>
   );
+};
+
+// Define the prop types
+RoundButton.propTypes = {
+  onPress: PropTypes.func.isRequired,
+  backgroundColor: PropTypes.string
 };
 
 export default RoundButton;
