@@ -21,7 +21,7 @@ const DrawingScreen = () => {
   const navigation = useNavigation();
   const [brushSize, setBrushSize] = useState(2);
   const [pathHistory, setPathHistory] = useState([]);
-  const [drawingColor, setDrawingColor] = useState('black');
+  //const [drawingColor, setDrawingColor] = useState('black');
   const backgroundColor = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
