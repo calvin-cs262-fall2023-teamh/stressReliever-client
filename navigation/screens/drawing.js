@@ -21,24 +21,24 @@ const DrawingScreen = () => {
   const navigation = useNavigation();
   const [brushSize, setBrushSize] = useState(2);
   const [pathHistory, setPathHistory] = useState([]);
-  const [drawingColor, setDrawingColor] = useState('black');
+  const [drawingColor] = useState('black');
   const backgroundColor = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const backgroundChangeInterval = setInterval(() => {
       Animated.timing(backgroundColor, {
         toValue: backgroundColor._value === 0 ? 1 : 0,
-        duration: 30000, // 30 seconds for the transition from gold to maroon
+        duration: 15000, // 15 seconds for the transition from gold to maroon
         useNativeDriver: false,
       }).start();
-    }, 30000); // Repeat every 30 seconds
+    }, 15000); // Repeat every 15 seconds
   
     return () => clearInterval(backgroundChangeInterval);
   }, [backgroundColor])
 
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
-    const point = `${locationX},${locationY - 15}`;
+    const point = `${locationX},${locationY + 75}`;
 
     if (drawing) {
       setDrawingPath((prevPath) => `${prevPath} L${point}`);
@@ -77,7 +77,7 @@ const DrawingScreen = () => {
   const shareDrawing = async () => {
     if (path) {
       try {
-        const shareResult = await Share.share({
+        await Share.share({
           message: path,
           title: 'Share Drawing',
         });
@@ -90,7 +90,7 @@ const DrawingScreen = () => {
   const saveDrawing = async () => {
     if (path) {
       try {
-        const shareResult = await Share.share({
+        await Share.share({
           message: path,
           title: 'Save Drawing',
         });
@@ -136,7 +136,7 @@ const DrawingScreen = () => {
         </TouchableOpacity>
         <Picker
           selectedValue={brushSize}
-          onValueChange={(itemValue, itemIndex) => setBrushSize(itemValue)}
+          onValueChange={(itemValue) => setBrushSize(itemValue)}
           style={styles.picker}
         >
           <Picker.Item label="Brush Size: 2" value={2} />
