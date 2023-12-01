@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
-import { View, PanResponder, StyleSheet, Animated } from 'react-native';
+import React, { useRef } from 'react';
+import { View, PanResponder, StyleSheet, Animated, Vibration } from 'react-native';
 
-const DualJoystickContainer = () => {
-  const [joystick1Position] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
-  const [joystick2Position] = useState(new Animated.ValueXY({ x: 0, y: 0 }));
+const Joystick = () => {
+  const position1 = useRef(new Animated.ValueXY()).current;
+  const position2 = useRef(new Animated.ValueXY()).current;
 
-  const handleMove1 = (event, gesture) => {
+  const handleMove1 = (_, gesture) => {
     const { dx, dy } = gesture;
     const newX = Math.min(75, Math.max(-75, dx));
     const newY = Math.min(75, Math.max(-75, dy));
-    joystick1Position.setValue({ x: newX, y: newY });
+    position1.setValue({ x: newX, y: newY });
+    // Trigger haptic feedback
+    Vibration.vibrate();
   };
 
-  const handleMove2 = (event, gesture) => {
+  const handleMove2 = (_, gesture) => {
     const { dx, dy } = gesture;
     const newX = Math.min(75, Math.max(-75, dx));
     const newY = Math.min(75, Math.max(-75, dy));
-    joystick2Position.setValue({ x: newX, y: newY });
+    position2.setValue({ x: newX, y: newY });
+    // Trigger haptic feedback
+    Vibration.vibrate();
+  };
+
+  const handleRelease = (position) => {
+    Animated.spring(position, {
+      toValue: { x: 0, y: 0 },
+      useNativeDriver: false,
+    }).start();
   };
 
   const panResponder1 = PanResponder.create({
@@ -26,12 +37,13 @@ const DualJoystickContainer = () => {
       [
         null,
         {
-          dx: joystick1Position.x,
-          dy: joystick1Position.y,
+          dx: position1.x,
+          dy: position1.y,
         },
       ],
       { listener: handleMove1, useNativeDriver: false }
     ),
+    onPanResponderRelease: () => handleRelease(position1),
   });
 
   const panResponder2 = PanResponder.create({
@@ -41,53 +53,59 @@ const DualJoystickContainer = () => {
       [
         null,
         {
-          dx: joystick2Position.x,
-          dy: joystick2Position.y,
+          dx: position2.x,
+          dy: position2.y,
         },
       ],
       { listener: handleMove2, useNativeDriver: false }
     ),
+    onPanResponderRelease: () => handleRelease(position2),
   });
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.joystickContainer, { marginRight: 50 }]} {...panResponder1.panHandlers}>
-        <Animated.View
-          style={[
-            styles.joystick,
-            {
-              transform: [
-                { translateX: joystick1Position.x },
-                { translateY: joystick1Position.y },
-              ],
-            },
-          ]}
-        />
-      </View>
-      <View style={styles.joystickContainer} {...panResponder2.panHandlers}>
-        <Animated.View
-          style={[
-            styles.joystick,
-            {
-              transform: [
-                { translateX: joystick2Position.x },
-                { translateY: joystick2Position.y },
-              ],
-            },
-          ]}
-        />
+    <View style={styles.toolContainer}>
+      <View style={styles.container}>
+        <View style={[styles.joystickContainer, styles.marginRight]} {...panResponder1.panHandlers}>
+          <Animated.View
+            style={[
+              styles.joystick,
+              {
+                transform: position1.getTranslateTransform(),
+              },
+            ]}
+          />
+        </View>
+        <View style={styles.joystickContainer} {...panResponder2.panHandlers}>
+          <Animated.View
+            style={[
+              styles.joystick,
+              {
+                transform: position2.getTranslateTransform(),
+              },
+            ]}
+          />
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  toolContainer: {
+    backgroundColor: '#263238',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    height: 140,
+  },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 50,
+    paddingHorizontal: 20,
     marginTop: 10,
-    backgroundColor: '#333333',
   },
   joystickContainer: {
     width: 100,
@@ -106,6 +124,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     position: 'absolute',
   },
+  marginRight: {
+    marginRight: 20,
+  },
 });
 
-export default DualJoystickContainer;
+export default Joystick;

@@ -1,23 +1,42 @@
 // RoundButton.js
 
 import React from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
+import Sound from 'react-native-sound';
+import { Vibration } from 'react-native';
 
 const RoundButton = ({ title, onPress, backgroundColor }) => {
+  const handleButtonPress = () => {
+    // Load sound file
+    const soundFile = new Sound('pop.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('Failed to load the sound file', error);
+      } else {
+        // Play the loaded sound file
+        soundFile.play();
+      }
+    });
+
+    // Trigger haptic feedback
+    Vibration.vibrate(100); // Adjust the vibration duration as needed
+
+    // Execute the button onPress callback
+    onPress();
+  };
+
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={handleButtonPress}>
       <View
         style={{
-          width: 50, // Adjust the width of the button as needed
-          height: 50, // Adjust the height of the button as needed
-          borderRadius: 25, // Make it round by setting half of the width/height as borderRadius
-          backgroundColor: backgroundColor, // Customize the color as needed
+          width: 50,
+          height: 50,
+          borderRadius: 25,
+          backgroundColor: backgroundColor,
           justifyContent: 'center',
           alignItems: 'center',
-          margin: 10, // Adjust the margin as needed
+          margin: 10,
         }}
-      >
-      </View>
+      ></View>
     </TouchableOpacity>
   );
 };

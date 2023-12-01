@@ -10,6 +10,8 @@ import ColorChangeScreen from './screens/ColorChangeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AchievementsScreen from './screens/AchievementsScreen';
+import BreathingScreen from './screens/BreathingScreen';
+import VentScreen from '../fidgetComponents/Vent';
 
 const homeName = "Home";
 const drawingName = "Draw";
@@ -17,8 +19,10 @@ const fidgetName = "Fidget";
 const colorChangeName = "ColorChange";
 const profileName = "Profile";
 
+
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
+const FidgetStack = createStackNavigator();
 
 function ProfileStackNavigator() {
   return (
@@ -31,6 +35,20 @@ function ProfileStackNavigator() {
       <ProfileStack.Screen name="Settings" component={SettingsScreen} />
       <ProfileStack.Screen name="Achievements" component={AchievementsScreen} />
     </ProfileStack.Navigator>
+  );
+}
+
+function FidgetStackNavigator() {
+  return (
+    <FidgetStack.Navigator>
+      <FidgetStack.Screen 
+        name="FidgetDetail"
+        component={FidgetScreen}
+        options={{ headerShown: false }}
+      />
+      <FidgetStack.Screen name="Breathing" component={BreathingScreen} />
+      <FidgetStack.Screen name="Venting" component={VentScreen} />
+    </FidgetStack.Navigator>
   );
 }
 
@@ -61,7 +79,7 @@ function MainContainer() {
         
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={drawingName} component={DrawingScreen} />
-        <Tab.Screen name={fidgetName} component={FidgetScreen} />
+        <Tab.Screen name={fidgetName} component={FidgetStackNavigator} />
         <Tab.Screen name={colorChangeName} component={ColorChangeScreen} />
         <Tab.Screen name={profileName} component={ProfileStackNavigator} />
       </Tab.Navigator>

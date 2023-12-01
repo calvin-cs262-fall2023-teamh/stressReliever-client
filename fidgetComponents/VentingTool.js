@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const BreathingTool = ({ navigation }) => {
+const VentingTool = ({ navigation }) => {
 
   return (
       <View style={styles.toolContainer}>
-        <MaterialCommunityIcons name="weather-windy" size={40} color="white" />
+        <MaterialCommunityIcons name="message-text-outline" size={40} color="white" />
       </View>
   );
 };
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BreathingTool;
+export default VentingTool;

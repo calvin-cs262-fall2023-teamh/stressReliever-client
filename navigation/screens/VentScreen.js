@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+const VentingTool = ({ navigation }) => {
+
 const VentScreen = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -8,5 +10,6 @@ const VentScreen = () => {
     </View>
   );
 };
+}
 
 export default VentScreenComponent;

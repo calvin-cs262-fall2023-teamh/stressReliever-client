@@ -1,31 +1,128 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, TextInput, StyleSheet, TouchableOpacity, Animated, Easing, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const VentScreen = ({ onClose }) => {
+const VentingTool = () => {
   const [message, setMessage] = useState('');
+  const [sentMessage, setSentMessage] = useState('');
+  const moveAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (sentMessage !== '') {
+      // Trigger message sent animation
+      animateMessageSent();
+    }
+  }, [sentMessage]);
+
+  const animateMessageSent = () => {
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 200,
+        easing: Easing.ease,
+        useNativeDriver: false,
+      }),
+      Animated.timing(moveAnim, {
+        toValue: -1000, // Change to the value off the screen
+        duration: 3000, // Adjust duration as needed
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      // Animation completed, reset message state
+      setMessage('');
+      setSentMessage('');
+      moveAnim.setValue(0);
+      scaleAnim.setValue(0);
+    });
+  };
 
   const handleSend = () => {
-    // Handle sending the message (you can implement this logic)
+    // Logic to handle sending the message goes here
     console.log('Message sent:', message);
 
-    // Close the MessageScreen
-    onClose();
+    // Set the sent message to trigger the animation
+    setSentMessage(message);
   };
 
   return (
-    <TouchableOpacity onPress={handleSend}>
-      <View style={{ padding: 20, backgroundColor: 'lightblue', borderRadius: 20, margin: 20 }}>
-        <Text style={{ fontSize: 18, marginBottom: 10 }}>Type how you feel and then release it</Text>
+    <View style={styles.container}>
+      <View style={styles.toolContainer}>
         <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingLeft: 10 }}
+          style={styles.input}
           placeholder="Type your message..."
           onChangeText={(text) => setMessage(text)}
           value={message}
+          placeholderTextColor="white" // Text color in the input field
+          selectionColor="white" // Selection color in the input field
+          color="white" // Text color of the input value
+          backgroundColor="black" // Background color of the input field
         />
-        <Button title="Send" onPress={handleSend} />
+        <TouchableOpacity onPress={handleSend}>
+          <MaterialCommunityIcons name="send" size={24} color="#87CEFA" />
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+      {sentMessage !== '' && (
+        <Animated.View
+          style={[
+            styles.sentMessageContainer,
+            {
+              transform: [{ translateY: moveAnim }],
+              opacity: scaleAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+            },
+          ]}
+        >
+          <View style={styles.sentMessageBubble}>
+            <Text style={styles.sentMessageText}>{sentMessage}</Text>
+          </View>
+        </Animated.View>
+      )}
+    </View>
   );
 };
 
-export default VentScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black', // Set the background color of the screen
+    marginTop: '1%',
+  },
+  toolContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#263238',
+    padding: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  input: {
+    height: 40,
+    width: '70%',
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingLeft: 10,
+    marginRight: 10,
+    color: 'white', // Set text color of the input field
+  },
+  sentMessageContainer: {
+    position: 'absolute',
+    top: 50, // Adjust the initial position
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sentMessageBubble: {
+    backgroundColor: 'lightblue',
+    borderRadius: 20,
+    padding: 10,
+  },
+  sentMessageText: {
+    fontSize: 16,
+    color: 'black',
+  },
+});
+
+export default VentingTool;
