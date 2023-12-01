@@ -89,15 +89,29 @@ const ProfileScreen = ({ navigation }) => {
     timerContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      marginBottom: 15, // Add a bottom margin for spacing
     },
     input: {
       flex: 1,
-      borderColor: darkMode ? '#FFFFFF' : '#ccc', // Apply dark mode border color
+      borderColor: darkMode ? '#FFFFFF' : '#ccc', // Adjust as per the dark mode
       borderWidth: 1,
       marginRight: 10,
       padding: 8,
       borderRadius: 5,
-      color: darkMode ? '#FFFFFF' : '#555', // Apply dark mode text color
+      backgroundColor: '#707070', // A darker shade similar to the card color for contrast
+      color: '#EFEFEF', // A light but not white color for text for better readability
+      fontWeight: '500', // Semi-bold to make text more prominent
+      fontSize: 16, // Slightly larger font size for better visibility
+      textShadowColor: 'rgba(0, 0, 0, 0.2)', // Subtle shadow for depth
+      textShadowOffset: { width: 0, height: 1 },
+      textShadowRadius: 1,
+    },
+    // Style for time remaining text
+    timeRemaining: {
+      fontSize: 16,
+      color: darkMode ? '#FFFFFF' : '#555',
+      marginTop: 10, // Added top margin for spacing
+      textAlign: 'center', // Center the text
     },
     footer: {
       alignItems: 'center',
@@ -145,9 +159,9 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleSetTimer = () => {
-    const time = parseInt(personalTimer, 10);
+    const time = parseFloat(personalTimer); // Use parseFloat instead of parseInt
     if (!isNaN(time) && time > 0) {
-      setRemainingTime(time * 60);
+      setRemainingTime(Math.floor(time * 60)); // Convert decimal minutes to seconds
       Alert.alert('Timer Set', `Your timer is set for ${personalTimer} minutes. We'll notify you when time is up.`);
       setPersonalTimer('');
     } else {
