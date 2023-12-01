@@ -1,16 +1,17 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-//import { useNavigation } from '@react-navigation/native';
-import ToolSquare from '../../fidgetComponents/switch';
+import React, { useContext } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import RoundButtonToolbox from '../../fidgetComponents/buttons';
 import FidgetSpinner from '../../fidgetComponents/Spinner';
-import VentScreen from '../../fidgetComponents/Vent';
-import Joystick from '../../fidgetComponents/joyStick';
 import BreathingTool from '../../fidgetComponents/BreathingTool';
+import ToolSquare from '../../fidgetComponents/switch';
+import Joystick from '../../fidgetComponents/joyStick';
+import VentingTool from '../../fidgetComponents/VentingTool';
 import DarkModeContext from '../../color/DarkModeContext';
 
 const ToolScreen = () => {
   const { darkMode } = useContext(DarkModeContext);
+  const navigation = useNavigation();
 
   const styles = StyleSheet.create({
     container: {
@@ -19,27 +20,14 @@ const ToolScreen = () => {
       alignItems: 'center',
       backgroundColor: darkMode ? '#000000' : '#FFFFFF',
     },
-    text: {
-      color: darkMode ? '#FFFFFF' : '#000000',
-    },
-    toolContainer: {
-      backgroundColor: darkMode ? '#333333' : '#DDDDDD',
-      padding: 40,
-      borderRadius: 10,
-      marginBottom: 10,
-      width: 130,
-      height: 140,
-      marginTop: 10,
-      marginRight: 5,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
     toolsWrapper: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       flexWrap: 'wrap',
       width: '100%',
       paddingHorizontal: 5,
+    },
+    section: {
+      margin: 5,
     },
     ventButton: {
       backgroundColor: 'lightblue',
@@ -50,52 +38,50 @@ const ToolScreen = () => {
       margin: 10,
       alignItems: 'center',
     },
+    rowContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    columnContainer: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    firstRowContainer: {
+      marginTop:20, // Increase this value to move the first row down more
+    },
+    secondRowContainer: {
+      marginTop: 20, // Increase this value to move the second row down more
+    },
+    bottomContainer: {
+      marginTop: 20,
+    },
   });
-
-  const [isVentScreenVisible, setVentScreenVisible] = useState(false);
-
-  const toggleVentScreen = () => {
-    setVentScreenVisible(!isVentScreenVisible);
-  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.toolsWrapper}>
-        <View style={styles.toolContainer}>
-          <ToolSquare title='Tool 1' size={{ width: 110, height: 110 }} backgroundColor={'red'} />
-        </View>
-        <View style={styles.toolContainer}>
-          < BreathingTool size={{ width: 120, height: 130 }} backgroundColor={'blue'} style={{ borderRadius: 20}} />
-        </View>
-        <View style={styles.toolContainer}>
-          <ToolSquare title='Tool 3' size={{ width: 110, height: 110 }} backgroundColor={'green'} />
-        </View>
+      {/* Top Row: Breathing, Text, and FidgetSpinner components */}
+      <View style={[styles.rowContainer, styles.firstRowContainer]}>
+        <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('Breathing')}>
+          <BreathingTool />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.section} onPress={() => navigation.navigate('Venting')}>
+          <VentingTool />
+        </TouchableOpacity>
+        <FidgetSpinner />
       </View>
-      <TouchableOpacity onPress={toggleVentScreen}>
-        <View style={{
-          backgroundColor: 'lightblue',
-          borderRadius: 10,
-          padding: 10,
-          margin: 10,
-          alignItems: 'center',
-        }}>
-          <Text style={{ fontSize: 18 }}>Vent here...</Text>
-        </View>
-      </TouchableOpacity>
-      {isVentScreenVisible && <VentScreen onClose={toggleVentScreen} />}
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.toolContainer}>
-          <RoundButtonToolbox />
-        </View>
-        <View style={styles.toolContainer}>
-          <FidgetSpinner />
-        </View>
+      {/* Second Row: Buttons and ToolSquares */}
+      <View style={[styles.rowContainer, styles.secondRowContainer]}>
+        <RoundButtonToolbox />
+        <ToolSquare title="Tool 1" size={{ width: 80, height: 170 }} backgroundColor={'#191b1c'} />
+        <ToolSquare title="Tool 2" size={{ width: 80, height: 170 }} backgroundColor={'#191b1c'} />
       </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Joystick />
+      {/* Joystick positioned towards the bottom */}
+      <View style={[styles.columnContainer, styles.bottomContainer]}>
+        <Joystick />
       </View>
     </View>
-
   );
 };
 
