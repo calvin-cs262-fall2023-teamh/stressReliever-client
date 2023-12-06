@@ -129,24 +129,54 @@ const ProfileScreen = ({ navigation }) => {
   const [remainingTime, setRemainingTime] = useState(null);
   const intervalRef = useRef(null);
 
-  const recordStartTime = async () => {
-    try {
-      const now = new Date();
-      await AsyncStorage.setItem('@start_time', now.toISOString());
-    } catch (err) {
-      console.warn(err);
-    }
-  };
 
-  const getElapsedTime = async () => {
-    try {
-      const startTime = await AsyncStorage.getItem('@start_time');
-      const now = new Date();
-      return differenceInSeconds(now, Date.parse(startTime));
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+
+
+  
+const recordStartTime = async () => {
+  try {
+    const now = new Date();
+    await AsyncStorage.setItem('@start_time', now.toISOString());
+
+    // Send a fetch request to update time spent on the server
+    const userId = '<Replace with the actual user ID>'; // You need to get the user ID from somewhere
+    await fetch('https://mindfulknights.azurewebsites.net/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, elapsedTime: 0 }), // Initial time spent is 0
+    });
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
+
+
+  
+
+const getElapsedTime = async () => {
+  try {
+    const startTime = await AsyncStorage.getItem('@start_time');
+    const now = new Date();
+    const elapsedTime = differenceInSeconds(now, Date.parse(startTime));
+
+    // Send a fetch request to update time spent on the server
+    const userId = '<Replace with the actual user ID>'; // You need to get the user ID from somewhere
+    await fetch('https://mindfulknights.azurewebsites.net/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, elapsedTime }),
+    });
+
+    return elapsedTime;
+  } catch (err) {
+    console.warn(err);
+  }
+};
 
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
