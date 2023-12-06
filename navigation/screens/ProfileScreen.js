@@ -139,7 +139,7 @@ const recordStartTime = async () => {
     await AsyncStorage.setItem('@start_time', now.toISOString());
 
     // Send a fetch request to update time spent on the server
-    const userId = '<Replace with the actual user ID>'; // You need to get the user ID from somewhere
+    const userId = 'USER123'; // You need to get the user ID from somewhere
     await fetch('https://mindfulknights.azurewebsites.net/', {
       method: 'PUT',
       headers: {
@@ -163,7 +163,7 @@ const getElapsedTime = async () => {
     const elapsedTime = differenceInSeconds(now, Date.parse(startTime));
 
     // Send a fetch request to update time spent on the server
-    const userId = '<Replace with the actual user ID>'; // You need to get the user ID from somewhere
+    const userId = 'USER123'; // You need to get the user ID from somewhere
     await fetch('https://mindfulknights.azurewebsites.net/', {
       method: 'PUT',
       headers: {
