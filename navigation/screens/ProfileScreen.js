@@ -6,6 +6,8 @@ import { differenceInSeconds } from 'date-fns';
 import AppStateListener from 'react-native-appstate-listener';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DarkModeContext from '../../color/DarkModeContext';
+//import LoginScreen from './LoginScreen.js'; // Adjust the path as needed
+
 
 const ProfileScreen = ({ navigation }) => {
   const { darkMode } = useContext(DarkModeContext);
@@ -133,50 +135,33 @@ const ProfileScreen = ({ navigation }) => {
 
 
   
-const recordStartTime = async () => {
-  try {
-    const now = new Date();
-    await AsyncStorage.setItem('@start_time', now.toISOString());
+  const recordStartTime = async () => {
+    try {
+      const now = new Date();
+      await AsyncStorage.setItem('@start_time', now.toISOString());
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
-    // Send a fetch request to update time spent on the server
-    const userId = 'USER123'; // You need to get the user ID from somewhere
-    await fetch('https://mindfulknights.azurewebsites.net/', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId, elapsedTime: 0 }), // Initial time spent is 0
-    });
-  } catch (err) {
-    console.warn(err);
-  }
-};
+  const getElapsedTime = async () => {
+    try {
+      const startTime = await AsyncStorage.getItem('@start_time');
+      const now = new Date();
+      return differenceInSeconds(now, Date.parse(startTime));
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
 
 
-  
 
-const getElapsedTime = async () => {
-  try {
-    const startTime = await AsyncStorage.getItem('@start_time');
-    const now = new Date();
-    const elapsedTime = differenceInSeconds(now, Date.parse(startTime));
 
-    // Send a fetch request to update time spent on the server
-    const userId = 'USER123'; // You need to get the user ID from somewhere
-    await fetch('https://mindfulknights.azurewebsites.net/', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId, elapsedTime }),
-    });
 
-    return elapsedTime;
-  } catch (err) {
-    console.warn(err);
-  }
-};
+
+
+
 
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
@@ -235,10 +220,27 @@ const getElapsedTime = async () => {
         <Text style={styles.email}>john.calvin@calvin.edu</Text>
       </View>
 
-      {/* Login/Sign up button */}
-      <TouchableOpacity style={styles.button} onPress={() => alert('Login functionality to be implemented')}>
-        <Text style={styles.buttonText}>Log In / Sign Up</Text>
-      </TouchableOpacity>
+
+
+
+
+
+
+
+      <TouchableOpacity
+  style={styles.button}
+  onPress={() => navigation.navigate('Login')}
+>
+  <Text style={styles.buttonText}>Log In / Sign Up</Text>
+</TouchableOpacity>
+
+
+
+
+
+
+
+
 
       {/* Recent activity section */}
       <View style={styles.section}>

@@ -10,6 +10,9 @@ import ColorChangeScreen from './screens/ColorChangeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AchievementsScreen from './screens/AchievementsScreen';
+import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
+
 
 const homeName = 'Home';
 const drawingName = 'Draw';
@@ -30,6 +33,8 @@ function ProfileStackNavigator() {
       />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} />
       <ProfileStack.Screen name="Achievements" component={AchievementsScreen} />
+      <ProfileStack.Screen name="Login" component={LoginScreen} />
+      <ProfileStack.Screen name="Signup" component={SignupScreen} />
     </ProfileStack.Navigator>
   );
 }
