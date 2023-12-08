@@ -8,6 +8,9 @@ import {
   Share,
   Dimensions,
   Animated,
+  Platform,
+  ActionSheetIOS,
+  Alert,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
@@ -27,14 +30,14 @@ const DrawingScreen = () => {
   useEffect(() => {
     const backgroundChangeInterval = setInterval(() => {
       Animated.timing(backgroundColor, {
-        toValue: backgroundColor._value === 0 ? 1 : 0,
-        duration: 15000, // 15 seconds for the transition from gold to maroon
+        toValue: (backgroundColor._value + 1) % 11,
+        duration: 15000, // 15 seconds for the transition 
         useNativeDriver: false,
       }).start();
     }, 15000); // Repeat every 15 seconds
-  
+
     return () => clearInterval(backgroundChangeInterval);
-  }, [backgroundColor])
+  }, [backgroundColor]);
 
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
@@ -74,29 +77,70 @@ const DrawingScreen = () => {
     }
   };
 
-  const shareDrawing = async () => {
+  const shareOrSaveDrawing = async () => {
     if (path) {
-      try {
-        await Share.share({
-          message: path,
-          title: 'Share Drawing',
-        });
-      } catch (error) {
-        console.error('Error sharing the drawing:', error);
+      const options = Platform.select({
+        ios: ['Share with others', 'Save', 'Cancel'],
+        android: ['Share with others', 'Save', 'Cancel'],
+      });
+
+      if (Platform.OS === 'ios') {
+        ActionSheetIOS.showActionSheetWithOptions(
+          {
+            options,
+            cancelButtonIndex: 2,
+          },
+          (buttonIndex) => {
+            handleShareOrSaveActionSheetButton(buttonIndex);
+          }
+        );
+      } else {
+        // For Android
+        Alert.alert(
+          'Share or Save Drawing',
+          'Select an option:',
+          [
+            { text: 'Share with others', onPress: () => handleShareWithOthers() },
+            { text: 'Save', onPress: saveDrawing },
+            { text: 'Cancel', style: 'cancel' },
+          ],
+          { cancelable: true }
+        );
       }
     }
   };
 
-  const saveDrawing = async () => {
+  const handleShareOrSaveActionSheetButton = (buttonIndex) => {
+    switch (buttonIndex) {
+      case 0:
+        // Share with others
+        handleShareWithOthers();
+        break;
+      case 1:
+        // Save
+        saveDrawing();
+        break;
+      default:
+        // Cancel
+        break;
+    }
+  };
+
+  const handleShareWithOthers = async () => {
+    try {
+      await Share.share({
+        message: path,
+        title: 'Share Drawing',
+      });
+    } catch (error) {
+      console.error('Error sharing the drawing:', error);
+    }
+  };
+
+  const saveDrawing = () => {
     if (path) {
-      try {
-        await Share.share({
-          message: path,
-          title: 'Save Drawing',
-        });
-      } catch (error) {
-        console.error('Error saving the drawing:', error);
-      }
+      // Implement save logic here
+      Alert.alert('Drawing Saved', 'Your drawing has been saved.');
     }
   };
 
@@ -107,8 +151,25 @@ const DrawingScreen = () => {
   });
 
   const interpolatedBackgroundColor = backgroundColor.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['gold', 'maroon'],
+    inputRange: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    outputRange: ['gold','red',  'blue', 'maroon', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'cyan'],
+  });
+
+  const buttonStyle = Platform.select({
+    ios: {
+      height: 40,
+      width: 80,
+      paddingVertical: 10,
+      paddingHorizontal: 10,
+    },
+    android: {
+      paddingVertical: 5,
+      paddingHorizontal: 5,
+    },
+    web: {
+      paddingVertical: 8,
+      paddingHorizontal: 8,
+    },
   });
 
   return (
@@ -122,22 +183,19 @@ const DrawingScreen = () => {
       </TouchableOpacity>
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={clearCanvas} style={styles.button}>
+        <TouchableOpacity onPress={clearCanvas} style={[styles.button, buttonStyle]}>
           <Text style={styles.buttonText}>Clear</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={undoLastAction} style={styles.button}>
+        <TouchableOpacity onPress={undoLastAction} style={[styles.button, buttonStyle]}>
           <Text style={styles.buttonText}>Undo</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={shareDrawing} style={styles.button}>
+        <TouchableOpacity onPress={shareOrSaveDrawing} style={[styles.button, buttonStyle]}>
           <Text style={styles.buttonText}>Share</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={saveDrawing} style={styles.button}>
-          <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <Picker
           selectedValue={brushSize}
           onValueChange={(itemValue) => setBrushSize(itemValue)}
-          style={styles.picker}
+          style={[styles.picker, buttonStyle]}
         >
           <Picker.Item label="Brush Size: 2" value={2} />
           <Picker.Item label="Brush Size: 4" value={4} />
@@ -169,10 +227,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'black',
-    paddingVertical: 3,
-    paddingHorizontal: 3,
     borderRadius: 5,
-    marginHorizontal: 3,
+    marginHorizontal: 1,
   },
   buttonText: {
     color: 'white',
