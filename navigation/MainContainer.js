@@ -12,13 +12,14 @@ import SettingsScreen from './screens/SettingsScreen';
 import AchievementsScreen from './screens/AchievementsScreen';
 import BreathingScreen from './screens/BreathingScreen';
 import VentScreen from '../fidgetComponents/Vent';
+import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
 
 const homeName = "Home";
 const drawingName = "Draw";
 const fidgetName = "Fidget";
 const colorChangeName = "ColorChange";
 const profileName = "Profile";
-
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
@@ -34,6 +35,8 @@ function ProfileStackNavigator() {
       />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} />
       <ProfileStack.Screen name="Achievements" component={AchievementsScreen} />
+      <ProfileStack.Screen name="Login" component={LoginScreen} />
+      <ProfileStack.Screen name="Signup" component={SignupScreen} />
     </ProfileStack.Navigator>
   );
 }

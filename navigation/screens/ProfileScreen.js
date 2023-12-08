@@ -6,6 +6,8 @@ import { differenceInSeconds } from 'date-fns';
 import AppStateListener from 'react-native-appstate-listener';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DarkModeContext from '../../color/DarkModeContext';
+//import LoginScreen from './LoginScreen.js'; // Adjust the path as needed
+
 
 const ProfileScreen = ({ navigation }) => {
   const { darkMode } = useContext(DarkModeContext);
@@ -129,6 +131,10 @@ const ProfileScreen = ({ navigation }) => {
   const [remainingTime, setRemainingTime] = useState(null);
   const intervalRef = useRef(null);
 
+
+
+
+  
   const recordStartTime = async () => {
     try {
       const now = new Date();
@@ -147,6 +153,15 @@ const ProfileScreen = ({ navigation }) => {
       console.warn(err);
     }
   };
+
+
+
+
+
+
+
+
+
 
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
@@ -205,10 +220,27 @@ const ProfileScreen = ({ navigation }) => {
         <Text style={styles.email}>john.calvin@calvin.edu</Text>
       </View>
 
-      {/* Login/Sign up button */}
-      <TouchableOpacity style={styles.button} onPress={() => alert('Login functionality to be implemented')}>
-        <Text style={styles.buttonText}>Log In / Sign Up</Text>
-      </TouchableOpacity>
+
+
+
+
+
+
+
+      <TouchableOpacity
+  style={styles.button}
+  onPress={() => navigation.navigate('Login')}
+>
+  <Text style={styles.buttonText}>Log In / Sign Up</Text>
+</TouchableOpacity>
+
+
+
+
+
+
+
+
 
       {/* Recent activity section */}
       <View style={styles.section}>
