@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, StyleSheet, View } from 'react-native'; // Removed TouchableOpacity
+import { Animated, View, StyleSheet } from 'react-native';
 
 const FidgetSpinner = () => {
-  // Declare animated value for rotation
   const [animatedValue] = useState(new Animated.Value(0));
 
-  // Start the rotation animation when the component is mounted
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: 1,
       duration: 2000,
       useNativeDriver: false,
-      repeat: -1, // Infinite rotation
+      repeat: -1,
     }).start();
   }, []);
 
-  // Define the rotation style using interpolation
   const spinnerStyle = {
     transform: [
       {
@@ -28,23 +25,28 @@ const FidgetSpinner = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Render the animated spinner */}
+    <View style={styles.toolContainer}>
       <Animated.View style={[styles.spinner, spinnerStyle]} />
     </View>
   );
 };
 
-// Styles for the component
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  toolContainer: {
+    backgroundColor: '#263238', // Set background color to pink
+    padding: 40,
+    borderRadius: 10,
+    marginBottom: 10,
+    width: 115,
+    height: 125,
+    marginTop: 10,
+    marginRight: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   spinner: {
-    width: 120,
-    height: 120,
+    width: 105,
+    height: 105,
     borderStyle: 'solid',
     borderTopWidth: 10,
     borderRightWidth: 10,
@@ -58,5 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// Export the FidgetSpinner component
 export default FidgetSpinner;

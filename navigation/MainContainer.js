@@ -10,27 +10,48 @@ import ColorChangeScreen from './screens/ColorChangeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AchievementsScreen from './screens/AchievementsScreen';
+import BreathingScreen from './screens/BreathingScreen';
+import VentScreen from '../fidgetComponents/Vent';
+import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
 
-const homeName = 'Home';
-const drawingName = 'Draw';
-const fidgetName = 'Fidget';
-const colorChangeName = 'ColorChange';
-const profileName = 'Profile';
+const homeName = "Home";
+const drawingName = "Draw";
+const fidgetName = "Fidget";
+const colorChangeName = "ColorChange";
+const profileName = "Profile";
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
+const FidgetStack = createStackNavigator();
 
 function ProfileStackNavigator() {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen
+      <ProfileStack.Screen 
         name="ProfileDetail"
         component={ProfileScreen}
         options={{ headerShown: false }}
       />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} />
       <ProfileStack.Screen name="Achievements" component={AchievementsScreen} />
+      <ProfileStack.Screen name="Login" component={LoginScreen} />
+      <ProfileStack.Screen name="Signup" component={SignupScreen} />
     </ProfileStack.Navigator>
+  );
+}
+
+function FidgetStackNavigator() {
+  return (
+    <FidgetStack.Navigator>
+      <FidgetStack.Screen 
+        name="FidgetDetail"
+        component={FidgetScreen}
+        options={{ headerShown: false }}
+      />
+      <FidgetStack.Screen name="Breathing" component={BreathingScreen} />
+      <FidgetStack.Screen name="Venting" component={VentScreen} />
+    </FidgetStack.Navigator>
   );
 }
 
@@ -44,12 +65,12 @@ function MainContainer() {
             let iconName;
             let rn = route.name;
             let iconSize = focused ? 30 : 25;
-            let iconStyle = { marginBottom: -11 };
-
+            let iconStyle = { marginBottom: -11 }; 
+            
             if (rn === homeName) iconName = 'home-outline';
             else if (rn === drawingName) iconName = 'brush-outline';
-            else if (rn === fidgetName) iconName = 'reload-outline';
-            else if (rn === colorChangeName) iconName = 'color-palette-outline';
+            else if (rn === fidgetName) iconName = 'reload-outline';  
+            else if (rn === colorChangeName) iconName = 'color-palette-outline'; 
             else if (rn === profileName) iconName = 'person-outline';
 
             return <Ionicons name={iconName} size={iconSize} color={color} style={iconStyle} />;
@@ -58,10 +79,10 @@ function MainContainer() {
           tabBarInactiveTintColor: 'grey',
           tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: 0 },
         })}>
-
+        
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={drawingName} component={DrawingScreen} />
-        <Tab.Screen name={fidgetName} component={FidgetScreen} />
+        <Tab.Screen name={fidgetName} component={FidgetStackNavigator} />
         <Tab.Screen name={colorChangeName} component={ColorChangeScreen} />
         <Tab.Screen name={profileName} component={ProfileStackNavigator} />
       </Tab.Navigator>

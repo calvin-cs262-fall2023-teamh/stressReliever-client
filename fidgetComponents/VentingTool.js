@@ -4,12 +4,12 @@ import { View, StyleSheet } from 'react-native';
 // Importing MaterialCommunityIcons for icon usage
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-// Functional component BreathingTool
-const BreathingTool = () => {
+// Functional component VentingTool
+const VentingTool = () => {
   // The return statement renders the component UI
   return (
     <View style={styles.toolContainer}>
-      <MaterialCommunityIcons name="weather-windy" size={40} color="white" />
+      <MaterialCommunityIcons name="message-text-outline" size={40} color="white" />
     </View>
   );
 };
@@ -27,5 +27,5 @@ const styles = StyleSheet.create({
   // Removed unused styles for cleaner code
 });
 
-// Exporting BreathingTool for use in other parts of the application
-export default BreathingTool;
+// Exporting VentingTool for use in other parts of the application
+export default VentingTool;
