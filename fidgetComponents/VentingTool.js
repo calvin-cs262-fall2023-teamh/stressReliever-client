@@ -1,25 +1,21 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+// Import React and necessary components from 'react-native'
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+// Importing MaterialCommunityIcons for icon usage
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const VentingTool = ({ navigation }) => {
-
+// Functional component VentingTool
+const VentingTool = () => {
+  // The return statement renders the component UI
   return (
-      <View style={styles.toolContainer}>
-        <MaterialCommunityIcons name="message-text-outline" size={40} color="white" />
-      </View>
+    <View style={styles.toolContainer}>
+      <MaterialCommunityIcons name="message-text-outline" size={40} color="white" />
+    </View>
   );
 };
 
-
-//Take off touch opacity from here and add it to mainContainer
+// StyleSheet for the component
 const styles = StyleSheet.create({
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
   toolContainer: {
     backgroundColor: '#263238',
     padding: 40,
@@ -28,17 +24,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sectionContent: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  sectionSubtitle: {
-    fontSize: 14,
-    color: 'gray',
-  },
+  // Removed unused styles for cleaner code
 });
 
+// Exporting VentingTool for use in other parts of the application
 export default VentingTool;

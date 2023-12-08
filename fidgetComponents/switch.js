@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Switch } from 'react-native';
+import PropTypes from 'prop-types'; // Import PropTypes
 
 const ToolSquare = ({ size }) => {
   const [switch1Value, setSwitch1Value] = useState(false);
   const [switch2Value, setSwitch2Value] = useState(false);
   const [switch3Value, setSwitch3Value] = useState(false);
-
   return (
     <View
       style={{
@@ -47,6 +47,14 @@ const ToolSquare = ({ size }) => {
       />
     </View>
   );
+};
+
+// Define PropTypes for ToolSquare
+ToolSquare.propTypes = {
+  size: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default ToolSquare;
