@@ -14,6 +14,10 @@ import BreathingScreen from './screens/BreathingScreen';
 import VentScreen from '../fidgetComponents/Vent';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
+import PreviousDrawingsScreen from './screens/PreviousDrawingsScreen';
+import LastFidgetSessionReview from './screens/LastFidgetSession';
+import ColorChangeTapsScreen from './screens/ColorChangeTapsScreen';
+
 
 const homeName = "Home";
 const drawingName = "Draw";
@@ -24,6 +28,23 @@ const profileName = "Profile";
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
 const FidgetStack = createStackNavigator();
+
+const HomeStack = createStackNavigator();
+
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen 
+        name="HomeDetail"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen name="PreviousDrawingsScreen" component={PreviousDrawingsScreen} />
+      <HomeStack.Screen name="LastFidgetSessionScreen" component={LastFidgetSessionReview} />
+      <HomeStack.Screen name="ColorChangeTapsScreen" component={ColorChangeTapsScreen} />
+    </HomeStack.Navigator>
+  );
+}
 
 function ProfileStackNavigator() {
   return (
@@ -80,7 +101,7 @@ function MainContainer() {
           tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: 0 },
         })}>
         
-        <Tab.Screen name={homeName} component={HomeScreen} />
+        <Tab.Screen name={homeName} component={HomeStackNavigator} />
         <Tab.Screen name={drawingName} component={DrawingScreen} />
         <Tab.Screen name={fidgetName} component={FidgetStackNavigator} />
         <Tab.Screen name={colorChangeName} component={ColorChangeScreen} />
