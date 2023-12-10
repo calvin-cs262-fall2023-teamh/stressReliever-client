@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import PropTypes from 'prop-types'; // Import PropTypes
 
 const LoginScreen = ({ navigation }) => {
@@ -7,10 +7,40 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleLoginSubmit = () => {
-    // Implement your login logic here
-    // For now, we'll just log the email and password to the console
-    console.log('email:', email);
-    console.log('Password:', password);
+    console.log('username:', email);
+    console.log('password:', password);
+  
+    if (!email || !password) {
+      Alert.alert('Email and password are required.');
+      return;
+    }
+  
+    fetch(`https://mindfulknights.azurewebsites.net/users`)
+      .then(response => {
+        console.log('Response Status:', response.status);
+  
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to fetch user data');
+        }
+      })
+      .then(users => {
+        // Check if the entered email and password match any user
+        const matchedUser = users.find(user => user.email === email && user.password_hash === password);
+  
+        if (matchedUser) {
+          console.log('Login successful!');
+          Alert.alert('Login successful!');
+          // Optionally, you can add logic here to handle the successful login without navigation
+        } else {
+          Alert.alert('Login failed', 'Please check your credentials.');
+        }
+      })
+      .catch(error => {
+        console.error('Fetch Error:', error);
+        Alert.alert('An error occurred', 'Please try again later.');
+      });
   };
 
   const handleCreateAccount = () => {

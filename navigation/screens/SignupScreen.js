@@ -9,39 +9,36 @@ const SignupScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleCreateAccount = () => {
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.', [{ text: 'OK' }]);
-      return;
-    }
     // Prepare the data to be sent in the request body
     const userData = {
-      name: name,
+      username: name,
       email: email,
-      password: password,
+      password_hash: password,
+      // Additional properties if needed (type, profileimage, etc.)
     };
   
-    console.log('Data Sent to Server:', userData);  // Log the data before sending
-
-    fetch('https://mindfulknights.azurewebsites.net/create_user', {
+    console.log('Data Sent to Server:', userData);
+  
+    fetch('https://mindfulknights.azurewebsites.net/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(userData),
     })
-      .then(response => response.json()) 
+      .then(response => response.json())
       .then(data => {
         console.log('Server Response:', data);
-        Alert.alert('Success', 'Account created successfully!', [
-          { text: 'OK', onPress: () => navigation.navigate('Login') } // Navigate back to login screen
-        ]);
+        // Handle the response data as needed
+        // For example, update the state or show a success message
+        Alert.alert('Account Created', 'Account made successfully!');
       })
       .catch(error => {
         console.error('Fetch Error:', error);
-        Alert.alert('Error', 'Failed to create account. Please try again.', [{ text: 'OK', onPress: () => {} }]);
+        // Show an alert when there is an error
+        Alert.alert('Error', 'Failed to create account. Please try again.');
       });
-
-    };
+  };
 
   
     const handleLoginNavigation = () => {
