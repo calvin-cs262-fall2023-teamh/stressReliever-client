@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#ffffff',
     textAlign: 'center',
     marginVertical: 20,
   },

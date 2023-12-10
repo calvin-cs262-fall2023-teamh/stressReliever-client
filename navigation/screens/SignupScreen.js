@@ -1,20 +1,18 @@
-// SignupScreen.js
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import PropTypes from 'prop-types'; // Import PropTypes
 
-
-const SignupScreen = () => {
+const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-
-
-
-
-
   const handleCreateAccount = () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.', [{ text: 'OK' }]);
+      return;
+    }
     // Prepare the data to be sent in the request body
     const userData = {
       name: name,
@@ -34,7 +32,9 @@ const SignupScreen = () => {
       .then(response => response.json()) 
       .then(data => {
         console.log('Server Response:', data);
-        Alert.alert('Success', 'Account created successfully!', [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert('Success', 'Account created successfully!', [
+          { text: 'OK', onPress: () => navigation.navigate('Login') } // Navigate back to login screen
+        ]);
       })
       .catch(error => {
         console.error('Fetch Error:', error);
@@ -43,149 +43,107 @@ const SignupScreen = () => {
 
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>This is where you sign up</Text>
-
-      {/* Name section outline */}
-      <TouchableOpacity style={styles.section} disabled={true}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.sectionTitle}>Name:</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter your name"
-            placeholderTextColor="white"
-            value={name}
-            onChangeText={(text) => setName(text)}
-          />
-        </View>
-      </TouchableOpacity>
-
-      {/* Email section outline */}
-      <TouchableOpacity style={styles.section} disabled={true}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.sectionTitle}>Email:</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter your Calvin email"
-            placeholderTextColor="white"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </View>
-      </TouchableOpacity>
-
-      {/* Password section outline */}
-      <TouchableOpacity style={styles.section} disabled={true}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.sectionTitle}>Password:</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter your password"
-            placeholderTextColor="white"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </View>
-      </TouchableOpacity>
-
-      {/* Confirm Password section outline */}
-      <TouchableOpacity style={styles.section} disabled={true}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.sectionTitle}>Confirm Password:</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Confirm your password"
-            placeholderTextColor="white"
-            secureTextEntry={true}
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-          />
-        </View>
-      </TouchableOpacity>
-
-       {/* Create Account button */}
-            <TouchableOpacity style={styles.createAccountButton} onPress={() => handleCreateAccount()}>
-            <Text style={styles.createAccountButtonText}>Create Account</Text>
+  
+    const handleLoginNavigation = () => {
+      navigation.navigate('Login');
+    };
+  
+    return (
+      <View style={styles.container}>
+        <Text style={styles.headerText}>Sign Up</Text>
+  
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter your name"
+          placeholderTextColor="#aaa"
+          value={name}
+          onChangeText={setName}
+        />
+  
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter your email"
+          placeholderTextColor="#aaa"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+  
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter your password"
+          placeholderTextColor="#aaa"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+        />
+  
+        <TextInput
+          style={styles.textInput}
+          placeholder="Confirm your password"
+          placeholderTextColor="#aaa"
+          secureTextEntry={true}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
+  
+        <TouchableOpacity style={styles.button} onPress={handleCreateAccount}>
+          <Text style={styles.buttonText}>Create Account</Text>
         </TouchableOpacity>
-    </View>
-  );
-};
+  
+        <TouchableOpacity onPress={handleLoginNavigation}>
+          <Text style={styles.loginText}>Already have an account? Login</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#1c1c1c',
   },
-  text: {
-    fontSize: 18,
-    color: 'white',
-  },
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#5A5A5A',
-    marginBottom: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  sectionContent: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
+  headerText: {
+    fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 10,
+    color: '#fff',
+    marginBottom: 30,
   },
   textInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    color: 'white',
-    padding: 8,
+    backgroundColor: '#333',
+    color: '#fff',
+    height: 50,
     borderRadius: 5,
-    placeholderTextColor: 'white',
+    paddingHorizontal: 10,
+    fontSize: 16,
+    width: '80%',
+    marginBottom: 15,
   },
-  createAccountButton: {
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 2,
+  button: {
+    backgroundColor: '#4caf50',
     padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
+    borderRadius: 5,
+    width: '80%',
+    alignItems: 'center',
+    marginTop: 10,
   },
-  createAccountButtonText: {
-    color: 'black',
+  buttonText: {
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',
+  },
+  loginText: {
+    color: '#fff',
+    marginTop: 15,
+    textDecorationLine: 'underline',
   },
 });
+
+// Define PropTypes for the component
+SignupScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default SignupScreen;
