@@ -3,8 +3,8 @@ import { View, Text, Switch, StyleSheet } from 'react-native';
 
 const SettingsScreen = () => {
   // For demonstration, these states are not functional
-  const [darkMode, setDarkMode] = React.useState(false);
-  const [notifications, setNotifications] = React.useState(true);
+  const [darkMode, setDarkMode] = React.useState(true);
+  const [notifications, setNotifications] = React.useState(false);
 
   return (
     <View style={styles.container}>
