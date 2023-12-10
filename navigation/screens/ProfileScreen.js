@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput,
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { differenceInSeconds } from 'date-fns';
 import AppStateListener from 'react-native-appstate-listener';
+import { AppContext } from './AppContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DarkModeContext from '../../color/DarkModeContext';
 //import LoginScreen from './LoginScreen.js'; // Adjust the path as needed
@@ -11,6 +12,7 @@ import DarkModeContext from '../../color/DarkModeContext';
 
 const ProfileScreen = ({ navigation }) => {
   const { darkMode } = useContext(DarkModeContext);
+  const { startTime } = useContext(AppContext);
 
   const styles = StyleSheet.create({
     container: {
@@ -131,10 +133,6 @@ const ProfileScreen = ({ navigation }) => {
   const [remainingTime, setRemainingTime] = useState(null);
   const intervalRef = useRef(null);
 
-
-
-
-  
   const recordStartTime = async () => {
     try {
       const now = new Date();
@@ -144,30 +142,22 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
-  const getElapsedTime = async () => {
-    try {
-      const startTime = await AsyncStorage.getItem('@start_time');
+  const getElapsedTime = () => {
+    if (startTime) {
       const now = new Date();
-      return differenceInSeconds(now, Date.parse(startTime));
-    } catch (err) {
-      console.warn(err);
+      const start = new Date(startTime); // Convert startTime to Date if it's a string
+      return differenceInSeconds(now, start);
     }
+    return 0;
   };
-
-
-
-
-
-
-
-
-
+  
 
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
-      getElapsedTime().then((elapsedTime) => setElapsed(elapsedTime));
+      const elapsedTime = getElapsedTime(); // Directly get the elapsed time
+      setElapsed(elapsedTime);
     }, 1000);
-  };
+  };  
 
   const stopTimer = () => {
     clearInterval(intervalRef.current);
@@ -188,7 +178,7 @@ const ProfileScreen = ({ navigation }) => {
     if (remainingTime !== null) {
       if (remainingTime === 0) {
         setRemainingTime(null);
-        Alert.alert('Time’s Up!', 'Your personal timer has ended. Take a break or continue exploring!');
+        Alert.alert('Time is Up!', 'Your personal timer has ended. Take a break or continue exploring!');
       } else {
         const timer = setInterval(() => {
           setRemainingTime((prevTime) => prevTime - 1);
@@ -219,29 +209,12 @@ const ProfileScreen = ({ navigation }) => {
         <Text style={styles.name}>John Calvin</Text>
         <Text style={styles.email}>john.calvin@calvin.edu</Text>
       </View>
-
-
-
-
-
-
-
-
       <TouchableOpacity
   style={styles.button}
   onPress={() => navigation.navigate('Login')}
 >
   <Text style={styles.buttonText}>Log In / Sign Up</Text>
 </TouchableOpacity>
-
-
-
-
-
-
-
-
-
       {/* Recent activity section */}
       <View style={styles.section}>
         <Ionicons name="time-outline" size={30} color="#4A90E2" style={styles.sectionIcon} />

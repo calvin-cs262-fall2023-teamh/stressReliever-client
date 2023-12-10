@@ -1,18 +1,33 @@
-// Import React library
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkModeProvider } from './color/DarkModeContext';
-
-// Import main navigation container
 import MainContainer from './navigation/MainContainer';
+import { AppContext } from './navigation/screens/AppContext'; // Import from AppContext.js
 
-// Main app component
 function App() {
+  const [startTime, setStartTime] = useState(null);
+
+  const recordStartTime = async () => {
+    try {
+      const now = new Date();
+      await AsyncStorage.setItem('@start_time', now.toISOString());
+      setStartTime(now);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  useEffect(() => {
+    recordStartTime();
+  }, []);
+
   return (
-    <DarkModeProvider>
-      <MainContainer/>
-    </DarkModeProvider>
+    <AppContext.Provider value={{ startTime }}>
+      <DarkModeProvider>
+        <MainContainer />
+      </DarkModeProvider>
+    </AppContext.Provider>
   );
 }
 
-// Export the App component
 export default App;
