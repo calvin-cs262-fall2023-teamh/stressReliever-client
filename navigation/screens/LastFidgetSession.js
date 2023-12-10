@@ -31,20 +31,20 @@ const LastFidgetSessionReview = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1c1c1c',
+    backgroundColor: 'black', // Changed to fully black
     padding: 10,
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: 'white',
     textAlign: 'center',
     marginVertical: 20,
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2a2a2a',
+    backgroundColor: '#333', // Slightly lighter for contrast
     borderRadius: 10,
     padding: 15,
     marginBottom: 10,
@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
   },
   activityName: {
     fontSize: 18,
-    color: '#ffffff',
+    color: 'white',
     marginBottom: 5,
   },
   activityValue: {
     fontSize: 16,
-    color: '#dddddd',
+    color: 'white', // Adjusted for better visibility
   },
 });
 

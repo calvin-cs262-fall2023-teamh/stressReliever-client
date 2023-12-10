@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import PropTypes from 'prop-types'; // Import PropTypes
 
-// eslint-disable-next-line react/prop-types
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,52 +14,45 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleCreateAccount = () => {
-    // Navigate to the SignupScreen when the button is pressed
-    // eslint-disable-next-line react/prop-types
     navigation.navigate('Signup');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>This is where you login</Text>
+      <Text style={styles.headerText}>Login</Text>
 
-      {/* email section outline */}
-      <TouchableOpacity style={styles.section} disabled={true}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.sectionTitle}>Email:</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter your Calvin email"
-            placeholderTextColor="white"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </View>
+      {/* Email Input */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter your email"
+          placeholderTextColor="#aaa"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+      </View>
+
+      {/* Password Input */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter your password"
+          placeholderTextColor="#aaa"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+        />
+      </View>
+
+      {/* Submit Button */}
+      <TouchableOpacity style={styles.button} onPress={handleLoginSubmit}>
+        <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      {/* Password section outline */}
-      <TouchableOpacity style={styles.section} disabled={true}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.sectionTitle}>Password:</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter your password"
-            placeholderTextColor="white"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </View>
-      </TouchableOpacity>
-
-      {/* Submit button */}
-      <TouchableOpacity style={styles.submitButton} onPress={handleLoginSubmit}>
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity>
-
-      {/* "Need an account?" section */}
-      <TouchableOpacity style={[styles.submitButton, styles.createAccountButton]} onPress={handleCreateAccount}>
-        <Text style={styles.submitButtonText}>Need an account? Create one</Text>
+      {/* Create Account Link */}
+      <TouchableOpacity onPress={handleCreateAccount}>
+        <Text style={styles.createAccountText}>Need an account? Create one</Text>
       </TouchableOpacity>
     </View>
   );
@@ -70,59 +63,49 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#1c1c1c',
   },
-  text: {
-    fontSize: 18,
-    color: 'white',
-  },
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#5A5A5A',
-    marginBottom: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  sectionContent: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
+  headerText: {
+    fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 10,
+    color: '#fff',
+    marginBottom: 30,
+  },
+  inputContainer: {
+    width: '80%',
+    marginBottom: 15,
   },
   textInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    color: 'white',
-    padding: 8,
+    backgroundColor: '#333',
+    color: '#fff',
+    height: 50,
     borderRadius: 5,
-    placeholderTextColor: 'white',
+    paddingHorizontal: 10,
+    fontSize: 16,
   },
-  submitButton: {
-    backgroundColor: 'white',
+  button: {
+    backgroundColor: '#4caf50',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 5,
+    width: '80%',
     alignItems: 'center',
-    marginHorizontal: 40,
-    marginBottom: 10,
+    marginTop: 10,
   },
-  submitButtonText: {
-    color: 'black',
+  buttonText: {
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  createAccountButton: {
-    marginTop: 10,
+  createAccountText: {
+    color: '#fff',
+    marginTop: 15,
+    textDecorationLine: 'underline',
   },
 });
+
+// Define PropTypes for the component
+LoginScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default LoginScreen;

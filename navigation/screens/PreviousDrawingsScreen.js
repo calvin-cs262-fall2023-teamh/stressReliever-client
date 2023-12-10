@@ -18,9 +18,7 @@ const PreviousDrawingsScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.titleBar}>
-        <Text style={styles.title}>Previous Drawings</Text>
-      </View>
+      <Text style={styles.title}>Previous Drawings</Text>
       <View style={styles.imageContainer}>
         {images.map((image, index) => (
           <View key={index.toString()} style={styles.imageWrapper}>
@@ -37,15 +35,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
-  titleBar: {
-    backgroundColor: '#333', // Dark bar for the title
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
   title: {
-    fontSize: 24,
-    color: 'white',
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#ffffff',
     textAlign: 'center',
+    marginVertical: 14,
   },
   imageContainer: {
     flexDirection: 'row',
@@ -55,8 +50,8 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     margin: 10,
-    borderRadius: 10, // Optional for rounded corners
-    overflow: 'hidden', // Needed to apply the borderRadius
+    borderRadius: 10,
+    overflow: 'hidden',
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -64,8 +59,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: width / 2 - 40, // Adjust the width to fit two images per row with added margin
-    height: width / 2 - 40, // Making the height equal to the width for square images
+    width: width / 2 - 40,
+    height: width / 2 - 40,
   },
 });
 

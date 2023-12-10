@@ -86,19 +86,42 @@ function MainContainer() {
             let iconName;
             let rn = route.name;
             let iconSize = focused ? 30 : 25;
-            let iconStyle = { marginBottom: -11 }; 
-            
-            if (rn === homeName) iconName = 'home-outline';
-            else if (rn === drawingName) iconName = 'brush-outline';
-            else if (rn === fidgetName) iconName = 'reload-outline';  
-            else if (rn === colorChangeName) iconName = 'color-palette-outline'; 
-            else if (rn === profileName) iconName = 'person-outline';
+            let iconStyle = { marginBottom: -5 }; // Reduced bottom margin
+
+            switch (rn) {
+              case homeName:
+                iconName = 'home-outline';
+                color = focused ? 'tomato' : '#4A90E2'; 
+                break;
+              case drawingName:
+                iconName = 'brush-outline';
+                color = focused ? 'tomato' : '#F5A623'; 
+                break;
+              case fidgetName:
+                iconName = 'reload-outline';
+                color = focused ? 'tomato' : '#7ED321';
+                break;
+              case colorChangeName:
+                iconName = 'color-palette-outline';
+                color = focused ? 'tomato' : '#BD10E0';
+                break;
+              case profileName:
+                iconName = 'person-outline';
+                color = focused ? 'tomato' : '#50E3C2';
+                break;
+              default:
+                iconName = 'help-outline'; 
+            }
 
             return <Ionicons name={iconName} size={iconSize} color={color} style={iconStyle} />;
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'grey',
-          tabBarLabelStyle: { paddingTop: 10, fontSize: 10, marginBottom: 0 },
+          tabBarLabelStyle: { paddingTop: 10, fontSize: 12, marginBottom: 0 }, // Increased font size
+          tabBarStyle: { 
+            backgroundColor: '#333333', // Darker bar color
+            borderTopWidth: 0 // Remove top border
+          },
         })}>
         
         <Tab.Screen name={homeName} component={HomeStackNavigator} />
