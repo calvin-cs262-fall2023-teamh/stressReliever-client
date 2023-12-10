@@ -1,23 +1,80 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 
 // eslint-disable-next-line react/prop-types
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLoginSubmit = () => {
-    // Implement your login logic here
-    // For now, we'll just log the email and password to the console
-    console.log('email:', email);
-    console.log('Password:', password);
+
+
+
+
+
+
+
+
+
+  const handleLoginSubmit = ({ navigation }) => {
+    console.log('username:', email);
+    console.log('password:', password);
+  
+    if (!email || !password) {
+      alert('Email and password are required.');
+      return;
+    }
+  
+    fetch(`https://mindfulknights.azurewebsites.net/users`)
+      .then(response => {
+        console.log('Response Status:', response.status);
+  
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to fetch user data');
+        }
+      })
+      .then(users => {
+        // Check if the entered email and password match any user
+        const matchedUser = users.find(user => user.email === email && user.password_hash === password);
+  
+        if (matchedUser) {
+          console.log('Login successful!');
+          Alert.alert('Login successful!', '', [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Navigate to the profile screen
+                // eslint-disable-next-line react/prop-types
+                navigation.navigate('ProfileScreen', {
+                  name: matchedUser.username,
+                  email: matchedUser.email,
+                });
+              },
+            },
+          ]);
+        } else {
+          alert('Login failed. Please check your credentials.');
+        }
+      })
+      .catch(error => {
+        console.error('Fetch Error:', error);
+        alert('An error occurred during login.');
+      });
   };
+  
+  
+
+
 
   const handleCreateAccount = () => {
     // Navigate to the SignupScreen when the button is pressed
     // eslint-disable-next-line react/prop-types
     navigation.navigate('Signup');
   };
+
+
+
 
   return (
     <View style={styles.container}>
