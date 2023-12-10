@@ -1,9 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkModeProvider } from './color/DarkModeContext';
 import MainContainer from './navigation/MainContainer';
-
-export const AppContext = createContext();
+import { AppContext } from './navigation/screens/AppContext'; // Import from AppContext.js
 
 function App() {
   const [startTime, setStartTime] = useState(null);

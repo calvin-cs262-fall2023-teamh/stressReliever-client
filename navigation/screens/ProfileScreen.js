@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput,
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { differenceInSeconds } from 'date-fns';
 import AppStateListener from 'react-native-appstate-listener';
-import { AppContext } from '../../App'; 
+import { AppContext } from './AppContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DarkModeContext from '../../color/DarkModeContext';
 //import LoginScreen from './LoginScreen.js'; // Adjust the path as needed
