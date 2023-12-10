@@ -8,6 +8,6 @@ View the Stress Reliever project details [here](https://github.com/calvin-cs262-
 
 # Other Stress Reliever Repos
 - [Project Materials](https://github.com/calvin-cs262-fall2023-teamh/stressReliver-project)
-- [Data Service](https://github.com/calvin-cs262-fall2023-teamh/stressReliever-service)
+- [Data Service](https://github.com/calvin-cs262-fall2023-teamh/mindfulKnight-service)
 
 View our Organization [here](https://github.com/calvin-cs262-fall2023-teamh).
