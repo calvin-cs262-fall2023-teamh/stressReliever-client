@@ -14,14 +14,14 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const DrawingScreen = () => {
   const [path, setPath] = useState('');
   const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
-  const navigation = useNavigation();
+ 
   const [brushSize, setBrushSize] = useState(2);
   const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor] = useState('black');
@@ -38,6 +38,14 @@ const DrawingScreen = () => {
 
     return () => clearInterval(backgroundChangeInterval);
   }, [backgroundColor]);
+
+  // Help session questions and solutions
+  const helpSessionQuestions = () => 
+    {
+      alert('Touch and drag on the screen to draw. Adjust brush size using the picker.');
+    };
+   
+
 
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
@@ -79,23 +87,17 @@ const DrawingScreen = () => {
 
   const shareOrSaveDrawing = async () => {
     if (path) {
-      const options = Platform.select({
-        ios: ['Share with others', 'Save', 'Cancel'],
-        android: ['Share with others', 'Save', 'Cancel'],
-      });
-
       if (Platform.OS === 'ios') {
         ActionSheetIOS.showActionSheetWithOptions(
           {
-            options,
+            options: ['Share with others', 'Save', 'Cancel'],
             cancelButtonIndex: 2,
           },
           (buttonIndex) => {
             handleShareOrSaveActionSheetButton(buttonIndex);
           }
         );
-      } else {
-        // For Android
+      } else if (Platform.OS === 'android') {
         Alert.alert(
           'Share or Save Drawing',
           'Select an option:',
@@ -106,9 +108,24 @@ const DrawingScreen = () => {
           ],
           { cancelable: true }
         );
+      } else if (navigator.share) {
+        // Using standard web sharing API
+        try {
+          await navigator.share({
+            title: 'Share Drawing',
+            text: 'Check out my drawing!',
+            url: window.location.href,
+          });
+        } catch (error) {
+          console.error('Error sharing the drawing:', error);
+        }
+      } else {
+        // Handle unsupported sharing on other platforms
+        console.warn('Sharing not supported on this platform.');
       }
     }
   };
+  
 
   const handleShareOrSaveActionSheetButton = (buttonIndex) => {
     switch (buttonIndex) {
@@ -178,9 +195,12 @@ const DrawingScreen = () => {
         <Path d={path} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
         <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
       </Svg>
-      <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-back" size={30} color="white" />
+      <TouchableOpacity onPress={helpSessionQuestions} style={[styles.helpIcon, { zIndex: 2 }]}>
+        <MaterialCommunityIcons name="information" size={30} color="white" />
       </TouchableOpacity>
+      
+      
+      
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={clearCanvas} style={[styles.button, buttonStyle]}>
@@ -238,10 +258,23 @@ const styles = StyleSheet.create({
   picker: {
     width: 150,
   },
-  backIcon: {
+  helpIcon: {
     position: 'absolute',
     top: 5,
-    left: 5,
+    right: 5, 
+  },
+  helpSessionContainer: {
+    position: 'absolute',
+    top: 50,
+    left: 10,
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+    elevation: 5, // For Android shadow
+  },
+  helpSessionText: {
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
 
