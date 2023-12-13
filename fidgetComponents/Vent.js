@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Animated, Easing, Text } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Animated, Easing, Text, Modal, TouchableHighlight } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const VentingTool = () => {
@@ -7,10 +7,10 @@ const VentingTool = () => {
   const [sentMessage, setSentMessage] = useState('');
   const moveAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0)).current;
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (sentMessage !== '') {
-      // Trigger message sent animation
       animateMessageSent();
     }
   }, [sentMessage]);
@@ -24,12 +24,11 @@ const VentingTool = () => {
         useNativeDriver: false,
       }),
       Animated.timing(moveAnim, {
-        toValue: -1000, // Change to the value off the screen
-        duration: 3000, // Adjust duration as needed
+        toValue: -1000,
+        duration: 3000,
         useNativeDriver: true,
       }),
     ]).start(() => {
-      // Animation completed, reset message state
       setMessage('');
       setSentMessage('');
       moveAnim.setValue(0);
@@ -38,25 +37,119 @@ const VentingTool = () => {
   };
 
   const handleSend = () => {
-    // Logic to handle sending the message goes here
     console.log('Message sent:', message);
-
-    // Set the sent message to trigger the animation
     setSentMessage(message);
   };
 
   const handleInformationPress = () => {
-    // Logic to show information about the screen goes here
-    // For example, you can show a modal or navigate to another screen
-    // For demonstration purposes, an alert is used here
-    alert('This is a place where you can vent your emotions. Nothing you type or send will be saved anywhere');
+    setModalVisible(true);
   };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'black', // Set the background color of the screen
+      marginTop: '1%',
+    },
+    toolContainer: {
+      flexDirection: 'row',
+      backgroundColor: '#263238',
+      padding: 10,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    input: {
+      height: 40,
+      width: '70%',
+      borderColor: 'gray',
+      borderWidth: 1,
+      paddingLeft: 10,
+      marginRight: 10,
+      color: 'white', // Set text color of the input field
+    },
+    sentMessageContainer: {
+      position: 'absolute',
+      top: 50, // Adjust the initial position
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    sentMessageBubble: {
+      backgroundColor: 'lightblue',
+      borderRadius: 20,
+      padding: 10,
+    },
+    sentMessageText: {
+      fontSize: 16,
+      color: 'black',
+    },
+    infoButton: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+    },
+
+    // Modal styles
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 10,
+      alignItems: 'center',
+      elevation: 5,
+    },
+    closeButton: {
+      marginTop: 20,
+      padding: 10,
+      backgroundColor: 'lightblue',
+      borderRadius: 5,
+    },
+    closeButtonText: {
+      textAlign: 'center',
+    },
+    helpText: {
+      textAlign: 'center',
+      fontSize: 18,
+      marginTop: 20,
+    },
+  });
 
   return (
     <View style={styles.container}>
+      {/* Help Icon Button */}
       <TouchableOpacity onPress={handleInformationPress} style={styles.infoButton}>
         <MaterialCommunityIcons name="information" size={24} color="white" />
       </TouchableOpacity>
+
+      {/* Modal for displaying help message */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.helpText}>
+              This is a place where you can vent your emotions. Nothing you type or send will be saved anywhere.
+            </Text>
+            <TouchableHighlight style={styles.closeButton} onPress={handleCloseModal}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Remaining tool components */}
       <View style={styles.toolContainer}>
         <TextInput
           style={styles.input}
@@ -93,51 +186,5 @@ const VentingTool = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black', // Set the background color of the screen
-    marginTop: '1%',
-  },
-  toolContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#263238',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  input: {
-    height: 40,
-    width: '70%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    paddingLeft: 10,
-    marginRight: 10,
-    color: 'white', // Set text color of the input field
-  },
-  sentMessageContainer: {
-    position: 'absolute',
-    top: 50, // Adjust the initial position
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sentMessageBubble: {
-    backgroundColor: 'lightblue',
-    borderRadius: 20,
-    padding: 10,
-  },
-  sentMessageText: {
-    fontSize: 16,
-    color: 'black',
-  },
-  infoButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-  },
-});
 
 export default VentingTool;
