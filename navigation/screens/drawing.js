@@ -28,8 +28,6 @@ const DrawingScreen = () => {
   const [currentDrawingPath, setCurrentDrawingPath] = useState('');
   const [drawingSessions, setDrawingSessions] = useState([]);
 
-
-
   useEffect(() => {
     const backgroundChangeInterval = setInterval(() => {
       Animated.timing(backgroundColor, {
