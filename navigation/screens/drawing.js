@@ -13,19 +13,20 @@ import {
   Alert,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Picker } from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const DrawingScreen = () => {
-  const [path, setPath] = useState('');
-  const [drawingPath, setDrawingPath] = useState('');
+  //const [path, setPath] = useState('');
+  //const [drawingPath, setDrawingPath] = useState('');
   const [drawing, setDrawing] = useState(false);
-  const navigation = useNavigation();
   const [brushSize, setBrushSize] = useState(2);
-  const [pathHistory, setPathHistory] = useState([]);
+  //const [pathHistory, setPathHistory] = useState([]);
   const [drawingColor] = useState('black');
   const backgroundColor = useRef(new Animated.Value(0)).current;
+  const [currentDrawingPath, setCurrentDrawingPath] = useState('');
+  const [drawingSessions, setDrawingSessions] = useState([]);
 
   useEffect(() => {
     const backgroundChangeInterval = setInterval(() => {
@@ -39,63 +40,63 @@ const DrawingScreen = () => {
     return () => clearInterval(backgroundChangeInterval);
   }, [backgroundColor]);
 
+  // Help session questions and solutions
+  const helpSessionQuestions = () => 
+    {
+      alert('Touch and drag on the screen to draw. Adjust brush size using the picker.');
+    };
+   
+
+
   const handlePanResponderMove = (event) => {
     const { locationX, locationY } = event.nativeEvent;
     const point = `${locationX},${locationY + 75}`;
-
+    
     if (drawing) {
-      setDrawingPath((prevPath) => `${prevPath} L${point}`);
-    } else {
-      setDrawingPath((prevPath) =>
-        prevPath === '' ? `M${point}` : `${prevPath} L${point}`
-      );
-      setDrawing(true);
-    }
-  };
+      setCurrentDrawingPath((prevPath) => `${prevPath} L${point}`);
+      } else {
+        setCurrentDrawingPath((prevPath) =>
+          prevPath === '' ? `M${point}` : `${prevPath} L${point}`
+        );
+        setDrawing(true);
+      }
+    };
+    
 
   const handlePanResponderRelease = () => {
     setDrawing(false);
-    const updatedPath = path + drawingPath;
-    setPath(updatedPath);
-    setPathHistory([...pathHistory, updatedPath]);
-    setDrawingPath('');
+  const updatedSession = { path: currentDrawingPath, brushSize };
+  setDrawingSessions([...drawingSessions, updatedSession]);
+  setCurrentDrawingPath('');
   };
 
   const clearCanvas = () => {
-    setPath('');
-    setDrawingPath('');
     setDrawing(false);
-    setPathHistory([]);
+    setCurrentDrawingPath('');
+    setDrawingSessions([]);
   };
 
   const undoLastAction = () => {
-    if (pathHistory.length > 0) {
-      const updatedHistory = [...pathHistory];
-      updatedHistory.pop();
-      setPathHistory(updatedHistory);
-      setPath(updatedHistory[updatedHistory.length - 1] || '');
+    if (drawingSessions.length > 0) {
+      const updatedSessions = [...drawingSessions];
+      updatedSessions.pop();
+      setDrawingSessions(updatedSessions);
     }
   };
 
   const shareOrSaveDrawing = async () => {
-    if (path) {
-      const options = Platform.select({
-        ios: ['Share with others', 'Save', 'Cancel'],
-        android: ['Share with others', 'Save', 'Cancel'],
-      });
-
+    if (drawingSessions.length > 0) {
       if (Platform.OS === 'ios') {
         ActionSheetIOS.showActionSheetWithOptions(
           {
-            options,
+            options: ['Share with others', 'Save', 'Cancel'],
             cancelButtonIndex: 2,
           },
           (buttonIndex) => {
             handleShareOrSaveActionSheetButton(buttonIndex);
           }
         );
-      } else {
-        // For Android
+      } else if (Platform.OS === 'android') {
         Alert.alert(
           'Share or Save Drawing',
           'Select an option:',
@@ -106,9 +107,23 @@ const DrawingScreen = () => {
           ],
           { cancelable: true }
         );
+      } else {
+        // For web or other platforms without navigator.share
+        try {
+          const drawingText = drawingSessions.map((session) => session.path).join('\n');
+          await Share.share({
+            title: 'Share Drawing',
+            message: `Check out my drawing:\n${drawingText}`,
+          });
+        } catch (error) {
+          console.error('Error sharing the drawing:', error);
+          // Handle the error or provide feedback to the user
+        }
       }
     }
   };
+  
+  
 
   const handleShareOrSaveActionSheetButton = (buttonIndex) => {
     switch (buttonIndex) {
@@ -129,20 +144,21 @@ const DrawingScreen = () => {
   const handleShareWithOthers = async () => {
     try {
       await Share.share({
-        message: path,
+        message: currentDrawingPath, // Change 'path' to 'currentDrawingPath'
         title: 'Share Drawing',
       });
     } catch (error) {
       console.error('Error sharing the drawing:', error);
     }
   };
-
+  
   const saveDrawing = () => {
-    if (path) {
+    if (currentDrawingPath) {
       // Implement save logic here
       Alert.alert('Drawing Saved', 'Your drawing has been saved.');
     }
   };
+  
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -174,12 +190,21 @@ const DrawingScreen = () => {
 
   return (
     <Animated.View style={[styles.container, { backgroundColor: interpolatedBackgroundColor }]}>
-      <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').height}>
-        <Path d={path} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
-        <Path d={drawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
-      </Svg>
-      <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-back" size={30} color="white" />
+    <Svg width={Dimensions.get('window').width} height={Dimensions.get('window').height}>
+          {drawingSessions.map((session, index) => (
+            <Path
+              key={index}
+              d={session.path}
+              stroke={drawingColor}
+              strokeWidth={session.brushSize}
+              fill="transparent"
+            />
+          ))}
+          <Path d={currentDrawingPath} stroke={drawingColor} strokeWidth={brushSize} fill="transparent" />
+        </Svg>
+
+      <TouchableOpacity onPress={helpSessionQuestions} style={[styles.helpIcon, { zIndex: 2 }]}>
+        <MaterialCommunityIcons name="information" size={30} color="white" />
       </TouchableOpacity>
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
@@ -192,17 +217,40 @@ const DrawingScreen = () => {
         <TouchableOpacity onPress={shareOrSaveDrawing} style={[styles.button, buttonStyle]}>
           <Text style={styles.buttonText}>Share</Text>
         </TouchableOpacity>
-        <Picker
-          selectedValue={brushSize}
-          onValueChange={(itemValue) => setBrushSize(itemValue)}
-          style={[styles.picker, buttonStyle]}
-        >
-          <Picker.Item label="Brush Size: 2" value={2} />
-          <Picker.Item label="Brush Size: 4" value={4} />
-          <Picker.Item label="Brush Size: 6" value={6} />
-          <Picker.Item label="Brush Size: 8" value={8} />
-          <Picker.Item label="Brush Size: 10" value={10} />
-        </Picker>
+        <RNPickerSelect
+            onValueChange={(itemValue) => setBrushSize(itemValue)}
+            items={[
+              { label: 'Brush Size: 2', value: 2 },
+              { label: 'Brush Size: 4', value: 4 },
+              { label: 'Brush Size: 6', value: 6 },
+              { label: 'Brush Size: 8', value: 8 },
+              { label: 'Brush Size: 10', value: 10 },
+            ]}
+            style={{
+              inputIOS: {
+                height: 40,
+                width: 150,
+                fontSize: 16,
+                paddingVertical: 10,
+                paddingHorizontal: 10,
+                borderRadius: 5,
+                backgroundColor: 'black',
+                color: 'white',
+              },
+              inputAndroid: {
+                height: 40,
+                width: 150,
+                fontSize: 16,
+                paddingVertical: 10,
+                paddingHorizontal: 10,
+                borderRadius: 5,
+                backgroundColor: 'black',
+                color: 'white',
+              },
+            }}
+            value={brushSize}
+          />
+
       </View>
     </Animated.View>
   );
@@ -238,10 +286,23 @@ const styles = StyleSheet.create({
   picker: {
     width: 150,
   },
-  backIcon: {
+  helpIcon: {
     position: 'absolute',
     top: 5,
-    left: 5,
+    right: 5, 
+  },
+  helpSessionContainer: {
+    position: 'absolute',
+    top: 50,
+    left: 10,
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+    elevation: 5, // For Android shadow
+  },
+  helpSessionText: {
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
 
