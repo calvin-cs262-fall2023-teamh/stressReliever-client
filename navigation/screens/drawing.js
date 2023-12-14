@@ -7,6 +7,8 @@ import {
   Text,
   Share,
   Dimensions,
+  Modal,
+  TouchableHighlight,
   Animated,
   Platform,
   ActionSheetIOS,
@@ -27,6 +29,7 @@ const DrawingScreen = () => {
   const backgroundColor = useRef(new Animated.Value(0)).current;
   const [currentDrawingPath, setCurrentDrawingPath] = useState('');
   const [drawingSessions, setDrawingSessions] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const backgroundChangeInterval = setInterval(() => {
@@ -40,11 +43,13 @@ const DrawingScreen = () => {
     return () => clearInterval(backgroundChangeInterval);
   }, [backgroundColor]);
 
-  // Help session questions and solutions
-  const helpSessionQuestions = () => 
-    {
-      alert('Touch and drag on the screen to draw. Adjust brush size using the picker.');
-    };
+  const helpSessionQuestions = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
    
 
 
@@ -204,8 +209,28 @@ const DrawingScreen = () => {
         </Svg>
 
       <TouchableOpacity onPress={helpSessionQuestions} style={[styles.helpIcon, { zIndex: 2 }]}>
-        <MaterialCommunityIcons name="information" size={30} color="white" />
+        <MaterialCommunityIcons name="information" size={24} color="white" />
       </TouchableOpacity>
+      {/* Modal for displaying help message */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.helpText}>
+            Unleash your creativity to alleviate stress by touching and dragging on the screen to draw. 
+            Use the picker to adjust the brush size. Tap Undo to remove the last drawing action, 
+            Select share to have the option to share  or save your artwork, and select your preferred brush size by tapping on the size option.
+            </Text>
+            <TouchableHighlight style={styles.closeButton} onPress={handleCloseModal}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
       <View {...panResponder.panHandlers} style={styles.canvas} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={clearCanvas} style={[styles.button, buttonStyle]}>
@@ -303,6 +328,33 @@ const styles = StyleSheet.create({
   helpSessionText: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    elevation: 5,
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'lightblue',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    textAlign: 'center',
+  },
+  helpText: {
+    textAlign: 'center',
+    fontSize: 18,
+    marginTop: 20,
   },
 });
 
