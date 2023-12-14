@@ -7,12 +7,12 @@ import {
   Text,
   Share,
   Dimensions,
-  Modal,
-  TouchableHighlight,
   Animated,
   Platform,
   ActionSheetIOS,
   Alert,
+  Modal,
+  TouchableHighlight,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import RNPickerSelect from 'react-native-picker-select';
