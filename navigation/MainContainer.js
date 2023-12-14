@@ -117,9 +117,9 @@ function MainContainer() {
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'grey',
-          tabBarLabelStyle: { paddingTop: 10, fontSize: 12, marginBottom: 0 }, // Increased font size
+          tabBarLabelStyle: { paddingTop: 10, fontSize: 12, marginBottom: -5 }, 
           tabBarStyle: { 
-            backgroundColor: '#333333', // Darker bar color
+            backgroundColor: '#333333', 
             borderTopWidth: 0 // Remove top border
           },
         })}>
