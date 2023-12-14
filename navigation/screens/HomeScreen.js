@@ -1,12 +1,18 @@
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react'; 
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TouchableHighlight } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DarkModeContext from '../../color/DarkModeContext';
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const { darkMode } = useContext(DarkModeContext);
   const navigation = useNavigation(); 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const displayHelpMessage = () => {
+    setModalVisible(true);
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -61,6 +67,41 @@ const HomeScreen = () => {
       color: darkMode ? '#888' : '#888',
       textAlign: 'center',
     },
+    infoButton: {
+      position: 'absolute',
+      top: 10,
+      right: 20,
+    },
+    infoIcon: {
+      color: 'white',
+      fontSize: 24,
+    },
+    helpText: {
+      textAlign: 'center',
+      fontSize: 18,
+      marginTop: 20,
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 10,
+      alignItems: 'center',
+      elevation: 5,
+    },
+    closeButton: {
+      marginTop: 20,
+      padding: 10,
+      backgroundColor: 'lightblue',
+      borderRadius: 5,
+    },
+    closeButtonText: {
+      textAlign: 'center',
+    },
   });
 
   return (
@@ -94,6 +135,37 @@ const HomeScreen = () => {
           <Text style={styles.cardDetail}>Review the colors you tapped</Text>
         </View>
       </TouchableOpacity>
+
+      {/* Help Button */}
+      <TouchableOpacity style={styles.infoButton} onPress={displayHelpMessage}>
+        <MaterialCommunityIcons name="information" style={styles.infoIcon} />
+      </TouchableOpacity>
+
+      {/* Help Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.helpText}>
+              This is the Home page. You can view your previous drawings, review your last fidget session, and explore color change taps by tapping on the respective cards. Each feature is designed to enhance your relaxation and mindfulness journey.
+            </Text>
+            <TouchableHighlight
+              style={styles.closeButton}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
 
       {/* Footer */}
       <View style={styles.footer}>

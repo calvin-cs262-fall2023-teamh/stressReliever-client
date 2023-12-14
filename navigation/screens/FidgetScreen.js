@@ -107,7 +107,7 @@ const ToolScreen = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.helpText}>This is the fidget page. You can navigate to the breathing & venting tool by tapping on the boxes. You are also able to use the fidget tools like the buttons, switches, and joystick.</Text>
+            <Text style={styles.helpText}>This is the Fidget page. You can navigate to the breathing & venting tool by tapping on the boxes. You are also able to use the fidget tools like the buttons, switches, and joystick.</Text>
             <TouchableHighlight
               style={styles.closeButton}
               onPress={() => {

@@ -1,18 +1,28 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Button, Alert, Modal, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { differenceInSeconds } from 'date-fns';
 import AppStateListener from 'react-native-appstate-listener';
 import { AppContext } from './AppContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DarkModeContext from '../../color/DarkModeContext';
-//import LoginScreen from './LoginScreen.js'; // Adjust the path as needed
-
+import profileImage from '../../pictures/profile.png';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const ProfileScreen = ({ navigation }) => {
   const { darkMode } = useContext(DarkModeContext);
   const { startTime } = useContext(AppContext);
+  const [elapsed, setElapsed] = useState(0);
+  const [personalTimer, setPersonalTimer] = useState('');
+  const [remainingTime, setRemainingTime] = useState(null);
+  const intervalRef = useRef(null);
+
+  const [helpModalVisible, setHelpModalVisible] = useState(false);
+
+  const displayHelpMessage = () => {
+    setHelpModalVisible(true);
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -126,12 +136,48 @@ const ProfileScreen = ({ navigation }) => {
       color: darkMode ? '#CCCCCC' : '#888', // Apply dark mode text color
       textAlign: 'center',
     },
+    helpButton: {
+      position: 'absolute',
+      top: 10,
+      right: 20,
+    },
+    helpIcon: {
+      color: 'white',
+      fontSize: 24,
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 10,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    modalText: {
+      textAlign: 'center',
+      fontSize: 18,
+      marginBottom: 15,
+    },
+    closeModalButton: {
+      marginTop: 15,
+      padding: 10,
+      backgroundColor: '#007bff',
+      borderRadius: 5,
+    },
+    closeButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
+    },
   });
-
-  const [elapsed, setElapsed] = useState(0);
-  const [personalTimer, setPersonalTimer] = useState('');
-  const [remainingTime, setRemainingTime] = useState(null);
-  const intervalRef = useRef(null);
 
   const recordStartTime = async () => {
     try {
@@ -198,10 +244,40 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      {/* Help Button */}
+      <TouchableOpacity style={styles.helpButton} onPress={displayHelpMessage}>
+        <MaterialCommunityIcons name="information" style={styles.helpIcon} />
+      </TouchableOpacity>
+
+      {/* Help Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={helpModalVisible}
+        onRequestClose={() => {
+          setHelpModalVisible(!helpModalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              This is the Profile page. Here you can view your recent activity, set personal timers, adjust settings, and check your achievements. Use the sections to navigate and customize your experience.
+            </Text>
+            <TouchableHighlight
+              style={styles.closeModalButton}
+              onPress={() => {
+                setHelpModalVisible(!helpModalVisible);
+              }}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
       {/* Profile image */}
       <Image 
         style={styles.profileImage}
-        source={{ uri: 'https://hips.hearstapps.com/hmg-prod/images/john-calvin-gettyimages-51246861.jpg?crop=1xw:1.0xh;center,top&resize=640:*' }} // Placeholder image with a cute kitten
+        source={profileImage}
       />
 
       {/* User information */}
