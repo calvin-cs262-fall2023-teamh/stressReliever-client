@@ -221,9 +221,9 @@ const DrawingScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.helpText}>
-            Unleash your creativity to alleviate stress by touching and dragging on the screen to draw. 
-            Use the picker to adjust the brush size. Tap Undo to remove the last drawing action, 
-            Select share to have the option to share  or save your artwork, and select your preferred brush size by tapping on the size option.
+            This is the Drawing page. Express your creativity and relieve stress by using touch and drag gestures to draw on the screen. 
+            Adjust the brush size with the size picker, undo your last action with the Undo button, and share or save your artwork using the Share option. 
+            Select your preferred brush size by tapping on the size option for a personalized drawing experience.
             </Text>
             <TouchableHighlight style={styles.closeButton} onPress={handleCloseModal}>
               <Text style={styles.closeButtonText}>Close</Text>
