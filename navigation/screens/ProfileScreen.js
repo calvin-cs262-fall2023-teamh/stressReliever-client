@@ -261,7 +261,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>
-              This is the Profile page. Here you can view your recent activity, set personal timers, adjust settings, and check your achievements. Use the sections to navigate and customize your experience.
+              This is the Profile page. You can view your recent activity, set personal timers, adjust settings, and check your achievements. Use the sections to navigate and customize your experience.
             </Text>
             <TouchableHighlight
               style={styles.closeModalButton}
